@@ -26,11 +26,11 @@ router = DefaultRouter()
 swagger_view = get_swagger_view(title='Pastebin API')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('account/', include('allauth.urls')),
+    path('api/auth/registration/', include('rest_auth.registration.urls')),
+    path('api/auth/', include('rest_auth.urls')),
     path('api/', include(router.urls)),
+    path('account/', include('allauth.urls')),
+    path('admin/', admin.site.urls),
     path('swagger/', swagger_view),
     path('docs/', include_docs_urls(title='API Documentation'))
 ]

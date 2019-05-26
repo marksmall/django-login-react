@@ -1,0 +1,33 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+}
+
+.footer {
+  flex-shrink: 0;
+}
+
+.menu {
+  display: flex;
+  list-style: none;
+  justify-content: space-evenly;
+  width: 100vw;
+}
