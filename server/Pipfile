@@ -1,0 +1,36 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+django-cors-headers = "*"
+django-extensions = "*"
+django-filter = "*"
+djangorestframework = "*"
+psycopg2-binary = "*"
+pyyaml = "*"
+django-environ = "*"
+uwsgi = "*"
+whitenoise = "*"
+django-allauth = "*"
+django-rest-auth = "*"
+django-rest-swagger = "*"
+
+[dev-packages]
+codecov = "*"
+coverage = "*"
+factory-boy = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-django = "*"
+pytest-sugar = "*"
+pytest-watch = "*"
+sphinx = "*"
+sphinx-rtd-theme = "*"
+pylint = "*"
+yapf = "*"
+
+[requires]
+python_version = "3.7"

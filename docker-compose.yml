@@ -1,0 +1,53 @@
+version: "3.5"
+
+services:
+  db:
+    image: kartoza/postgis:11.0-2.5
+    environment:
+      POSTGRES_DBNAME: djangologinreact
+      POSTGRES_USER: djangologinreact
+      POSTGRES_PASS: djangologinreact
+      ALLOW_IP_RANGE: 0.0.0.0/0
+    ports:
+      - "5666:5432"
+    networks:
+      - djangologinreact-develop
+
+  server:
+    build:
+      context: .
+    env_file: ./server/.env
+    tty: true
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings
+    command: >
+      -c "cd /opt/djangologinreact/ && pipenv install --dev"
+      -c "until echo > /dev/tcp/db/5432; do sleep 1; done"
+      -m "migrate --noinput"
+      -m "runserver 0.0.0.0:8000"
+    volumes:
+      - .:/opt/djangologinreact
+      - ./client:/opt/djangologinreact/client/
+    ports:
+      - "8000:8000"
+    networks:
+      - djangologinreact-develop
+
+  frontend:
+    image: node:10.15.3
+    environment:
+      NODE_ENV: "development"
+    working_dir: /opt/djangologinreact/client
+    volumes:
+      - ./client:/opt/djangologinreact/client
+    command: bash -c "yarn install && yarn build && yarn start"
+    tty: true
+    ports:
+      - "3000:3000"
+      - "35729:35729"
+    networks:
+      - djangologinreact-develop
+
+networks:
+  djangologinreact-develop:
+    driver: bridge
