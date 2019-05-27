@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import useForm from "../hooks/useForm";
 import validate from "./register-form.validator";
@@ -11,13 +11,17 @@ import styles from "./register-form.module.css";
 
 const RegisterForm = ({ register }) => {
   const { handleChange, handleSubmit, reset, values, errors } = useForm(onSubmit, validate);
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
 
   function onSubmit() {
-    console.log("Registering: ", values);
     register(values);
+    setRedirectToLogin(true);
   }
 
-  console.log("VALUES: ", values, " ERRORS: ", errors);
+  // Re-direct to originally clicked URL on successful login.
+  if (redirectToLogin) {
+    return <Redirect to="/login" />;
+  }
 
   return (
     <div className={styles["register-form-container"]}>
@@ -85,12 +89,7 @@ const RegisterForm = ({ register }) => {
         {errors.password2 && <p className={styles["error-message"]}>{errors.password2}</p>}
 
         <div className={styles.buttons}>
-          <Button
-            // type="submit"
-            className={styles.button}
-            onClick={reset}
-            disabled={Object.keys(values).length === 0}
-          >
+          <Button className={styles.button} onClick={reset} disabled={Object.keys(values).length === 0}>
             Reset
           </Button>
 

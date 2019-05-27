@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import useForm from "../hooks/useForm";
 import validate from "./login-form.validator";
@@ -9,15 +9,19 @@ import Button from "../ui/button.component";
 
 import styles from "./login-form.module.css";
 
-const LoginForm = ({ login }) => {
+const LoginForm = ({ login, from }) => {
   const { handleChange, handleSubmit, reset, values, errors } = useForm(onSubmit, validate);
+  const [redirectToReferrer, setRedirectToReferer] = useState(false);
 
   function onSubmit() {
-    console.log("Logging in with credentials: ", values);
     login(values);
+    setRedirectToReferer(true);
   }
 
-  console.log(`VALUES ${values}, ERRORS: ${errors}`);
+  // Re-direct to originally clicked URL on successful login.
+  if (redirectToReferrer) {
+    return <Redirect to={from} />;
+  }
 
   return (
     <div className={styles["login-form-container"]}>
@@ -75,12 +79,7 @@ const LoginForm = ({ login }) => {
         </p>
 
         <div className={styles.buttons}>
-          <Button
-            // type="submit"
-            className={styles.button}
-            onClick={reset}
-            disabled={Object.keys(values).length === 0}
-          >
+          <Button className={styles.button} onClick={reset} disabled={Object.keys(values).length === 0}>
             Reset
           </Button>
 

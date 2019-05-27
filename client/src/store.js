@@ -5,13 +5,13 @@ import { combineReducers } from "redux";
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import { createBrowserHistory } from "history";
 
-import admin from "./accounts/accounts.reducer";
+import account from "./accounts/accounts.reducer";
 
 export const history = createBrowserHistory();
 
 const createRootReducer = history =>
   combineReducers({
-    admin,
+    account,
     router: connectRouter(history)
   });
 

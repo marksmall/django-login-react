@@ -1,16 +1,7 @@
 import React from "react";
 import styles from "./button.module.css";
 
-const Button = ({
-  children,
-  onClick,
-  href,
-  disabled = false,
-  active,
-  padded = true,
-  type,
-  className
-}) => {
+const Button = ({ children, onClick, href, disabled = false, active, padded = true, type, className }) => {
   const props = {};
   const classes = [styles.button];
   if (type) classes.push(styles[type]);
@@ -32,7 +23,6 @@ const Button = ({
   }
 
   props.className = classes.join(" ");
-  console.log("CLASSES: ", props);
   return href ? (
     <a {...props}>{children}</a>
   ) : (

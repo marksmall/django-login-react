@@ -23,7 +23,7 @@ const validate = values => {
     errors.password1 = `Password ${values.password1} is too short`;
   } else if (values.password2.length < 5) {
     errors.password2 = `Password ${values.password2} is too short`;
-  } else if (values.password1 !== values.password2) {
+  } else if (values.password2 !== values.password1) {
     errors.password2 = `Password ${values.password1} doesn't match ${values.password2}`;
   }
 

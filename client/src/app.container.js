@@ -3,13 +3,13 @@ import { bindActionCreators } from "redux";
 
 import { history } from "./store";
 import { getUser } from "./accounts/accounts.selector";
-import { logout } from "./accounts/accounts.actions";
+import { logout, fetchUser } from "./accounts/accounts.actions";
 
 import App from "./app.component";
 
 const mapStateToProps = state => ({ user: getUser(state), history });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ logout: logout }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ fetchUser, logout }, dispatch);
 
 export default connect(
   mapStateToProps,

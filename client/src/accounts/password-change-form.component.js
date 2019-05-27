@@ -12,11 +12,8 @@ const PasswordChangeForm = ({ changePassword }) => {
   const { handleChange, handleSubmit, reset, values, errors } = useForm(onSubmit, validate);
 
   function onSubmit() {
-    console.log("Changing password: ", values);
     changePassword(values);
   }
-
-  console.log("VALUES: ", values, " ERRORS: ", errors);
 
   return (
     <div className={styles["password-change-form-container"]}>
@@ -24,54 +21,49 @@ const PasswordChangeForm = ({ changePassword }) => {
         <h3>Change Password</h3>
 
         <div className={styles["form-row"]}>
-          <label className={styles.label}>Email Address: </label>
+          <label className={styles.label}>Old Password: </label>
           <input
-            className={`${styles.input} ${errors.email ? styles.error : ""}`}
-            type="email"
-            name="email"
+            className={`${styles.input} ${errors.old_password ? styles.error : ""}`}
+            type="password"
+            name="old_password"
             onChange={handleChange}
-            value={values.email || ""}
+            value={values.old_password || ""}
             required
           />
           <em className={styles.required}>(Required)</em>
         </div>
-        {errors.email && <p className={styles["error-message"]}>{errors.email}</p>}
+        {errors.old_password && <p className={styles["error-message"]}>{errors.old_password}</p>}
 
         <div className={styles["form-row"]}>
-          <label className={styles.label}>Password: </label>
+          <label className={styles.label}>New Password: </label>
           <input
-            className={`${styles.input} ${errors.oldPassword ? styles.error : ""}`}
+            className={`${styles.input} ${errors.new_password1 ? styles.error : ""}`}
             type="password"
-            name="oldPassword"
+            name="new_password1"
             onChange={handleChange}
-            value={values.oldPassword || ""}
+            value={values.new_password1 || ""}
             required
           />
           <em className={styles.required}>(Required)</em>
         </div>
-        {errors.oldPassword && <p className={styles["error-message"]}>{errors.oldPassword}</p>}
+        {errors.new_password1 && <p className={styles["error-message"]}>{errors.new_password1}</p>}
 
         <div className={styles["form-row"]}>
           <label className={styles.label}>Password (Comfirm): </label>
           <input
-            className={`${styles.input} ${errors.newPassword ? styles.error : ""}`}
+            className={`${styles.input} ${errors.new_password2 ? styles.error : ""}`}
             type="password"
-            name="newPassword"
+            name="new_password2"
             onChange={handleChange}
-            value={values.newPassword || ""}
+            value={values.new_password2 || ""}
             required
           />
           <em className={styles.required}>(Required)</em>
         </div>
-        {errors.newPassword && <p className={styles["error-message"]}>{errors.newPassword}</p>}
+        {errors.new_password2 && <p className={styles["error-message"]}>{errors.new_password2}</p>}
 
         <div className={styles.buttons}>
-          <Button
-            // type="submit"
-            className={styles.button}
-            onClick={reset}
-            disabled={Object.keys(values).length === 0}
-          >
+          <Button className={styles.button} onClick={reset} disabled={Object.keys(values).length === 0}>
             Reset
           </Button>
 

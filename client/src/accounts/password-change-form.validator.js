@@ -1,20 +1,20 @@
 const validate = values => {
   let errors = {};
 
-  if (!values.email) {
-    errors.email = "Email address is required";
-  } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-    errors.email = `Email address ${values.email} is invalid`;
-  }
-
-  if (!values.oldPassword) {
-    errors.oldPassword = "Old Password is required";
-  } else if (values.oldPassword.length < 5) {
-    errors.oldPassword = `Old Password ${values.oldPassword} is too short`;
-  } else if (!values.newPassword) {
-    errors.newPassword = "New Password is required";
-  } else if (values.newPassword.length < 5) {
-    errors.newPassword = `New Password ${values.newPassword} is too short`;
+  if (!values.old_password) {
+    errors.old_password = "Old Password is required";
+  } else if (values.old_password.length < 5) {
+    errors.old_password = `Old Password ${values.old_password} is too short`;
+  } else if (!values.new_password1) {
+    errors.new_password1 = "New Password is required";
+  } else if (values.new_password1.length < 5) {
+    errors.new_password1 = `New Password ${values.new_password1} is too short`;
+  } else if (!values.new_password2) {
+    errors.new_password2 = "New Password is required";
+  } else if (values.new_password2.length < 5) {
+    errors.new_password2 = `New Password ${values.new_password2} is too short`;
+  } else if (values.new_password2 !== values.new_password1) {
+    errors.new_password2 = `Password ${values.new_password1} doesn't match ${values.new_password2}`;
   }
 
   return errors;

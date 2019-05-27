@@ -40,8 +40,8 @@ const useForm = (callback, validate) => {
 
   useEffect(() => {
     if (Object.keys(state.errors).length === 0 && state.isSubmitting) {
-      console.log("No errors and submitting: ");
       callback();
+      dispatch({ type: SET_IS_SUBMITTING, isSubmitting: false });
     }
   }, [state.errors, state.isSubmitting, callback]);
 

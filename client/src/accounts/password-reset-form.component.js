@@ -12,11 +12,8 @@ const PasswordResetForm = ({ resetPassword }) => {
   const { handleChange, handleSubmit, reset, values, errors } = useForm(onSubmit, validate);
 
   function onSubmit() {
-    console.log("Resetting password for: ", values);
     resetPassword(values);
   }
-
-  console.log(`VALUES ${values}, ERRORS: ${errors}`);
 
   return (
     <div className={styles["password-reset-form-container"]}>
@@ -38,12 +35,7 @@ const PasswordResetForm = ({ resetPassword }) => {
         {errors.email && <p className={styles["error-message"]}>{errors.email}</p>}
 
         <div className={styles.buttons}>
-          <Button
-            // type="submit"
-            className={styles.button}
-            onClick={reset}
-            disabled={Object.keys(values).length === 0}
-          >
+          <Button className={styles.button} onClick={reset} disabled={Object.keys(values).length === 0}>
             Reset
           </Button>
 
