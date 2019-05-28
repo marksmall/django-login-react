@@ -29,6 +29,7 @@ const PasswordResetForm = ({ resetPassword }) => {
             onChange={handleChange}
             value={values.email || ""}
             required
+            autoFocus
           />
           <em className={styles.required}>(Required)</em>
         </div>

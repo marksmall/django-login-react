@@ -5,9 +5,15 @@ import { login } from "./accounts.actions";
 
 import LoginForm from "./login-form.component";
 
-const mapStateToProps = (state, props) => ({
-  from: props.location.state ? props.location.state.from || { from: { pathname: "/" } } : null
-});
+// const mapStateToProps = (state, props) => ({
+//   from: props.location.state ? props.location.state.from || { from: { pathname: "/" } } : { from: { pathname: "/" } }
+// });
+const mapStateToProps = (state, props) => {
+  console.log("MAP STATE TO PROPS: ", props);
+  return {
+    from: props.location.state ? props.location.state.from || { from: { pathname: "/" } } : { from: { pathname: "/" } }
+  };
+};
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(

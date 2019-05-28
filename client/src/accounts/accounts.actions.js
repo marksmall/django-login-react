@@ -38,10 +38,10 @@ export const register = form => async dispatch => {
   const response = await sendData(API.register, form, JSON_HEADERS);
 
   if (!response.ok) {
-    const error = new Error();
-    error.message = response.statusText;
+    const errorResponse = await response.json();
+    const error = new Error(errorResponseToString(errorResponse));
 
-    NotificationManager.error(error.message, "Registration Error", 50000, () => {});
+    NotificationManager.error(error.message, `"Registration Error - ${response.statusText}`, 50000, () => {});
 
     return dispatch({
       type: REGISTER_REQUESTED_FAILURE,
@@ -62,9 +62,16 @@ export const activateAccount = form => async () => {
   const response = await sendData(API.activate, form, JSON_HEADERS);
 
   if (!response.ok) {
-    const error = new Error();
-    error.message = response.statusText;
-    NotificationManager.error(error.message, "Registration Verification Error", 50000, () => {});
+    const errorResponse = await response.json();
+    console.log("ERROR RESPONSE: ", errorResponse);
+    const error = new Error(errorResponseToString(errorResponse));
+
+    NotificationManager.error(
+      error.message,
+      `Registration Verification Error - ${response.statusText}`,
+      50000,
+      () => {}
+    );
   } else {
     NotificationManager.success("Successfully verified registration", "Successful account activation", 5000, () => {});
   }
@@ -82,9 +89,10 @@ export const login = form => async dispatch => {
   const response = await sendData(API.login, form, JSON_HEADERS);
 
   if (!response.ok) {
-    const error = new Error();
-    error.message = response.statusText;
-    NotificationManager.error(error.message, "Login Error", 50000, () => {});
+    const errorResponse = await response.json();
+    const error = new Error(errorResponseToString(errorResponse));
+
+    NotificationManager.error(error.message, `Login Error - ${response.statusText}`, 50000, () => {});
     return dispatch({
       type: LOGIN_REQUESTED_FAILURE,
       error
@@ -195,4 +203,25 @@ export const updateUser = form => async (dispatch, getState) => {
   const userObj = await response.json();
   NotificationManager.success("Successfully updated user", "Successful User Update", 5000, () => {});
   return dispatch({ type: UPDATE_USER_REQUESTED_SUCCESS, user: userObj });
+};
+
+const errorResponseToString = errorResponse => {
+  // Reduce all field errors to a single string representation.
+  const errorStr = Object.keys(errorResponse).reduce((acc, key) => {
+    const fieldErrors = errorResponse[key];
+
+    if (Array.isArray(fieldErrors)) {
+      // Reduce array of field errors to a single string representation.
+      const errors = fieldErrors.reduce((acc, error) => {
+        return (acc += error + " ");
+      }, "");
+      acc += `${key} - ${errors}\n`;
+    } else if (typeof fieldErrors === "string" || fieldErrors instanceof String) {
+      acc += fieldErrors;
+    }
+
+    return acc;
+  }, "");
+
+  return errorStr;
 };

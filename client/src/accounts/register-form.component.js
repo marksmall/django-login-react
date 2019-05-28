@@ -41,6 +41,7 @@ const RegisterForm = ({ register }) => {
             onChange={handleChange}
             value={values.username || ""}
             required
+            autoFocus
           />
           <em className={styles.required}>(Required)</em>
         </div>

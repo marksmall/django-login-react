@@ -46,6 +46,7 @@ const UpdateUserForm = ({ user, updateUser }) => {
             name="first_name"
             onChange={handleChange}
             value={values.first_name || user.first_name}
+            autoFocus
           />
         </div>
         {errors.first_name && <p className={styles["error-message"]}>{errors.first_name}</p>}

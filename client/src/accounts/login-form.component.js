@@ -19,8 +19,9 @@ const LoginForm = ({ login, from }) => {
   }
 
   // Re-direct to originally clicked URL on successful login.
+  console.log("REDIRECT TO: ", from);
   if (redirectToReferrer) {
-    return <Redirect to={from} />;
+    return <Redirect to={from.pathname} />;
   }
 
   return (
@@ -41,6 +42,7 @@ const LoginForm = ({ login, from }) => {
             onChange={handleChange}
             value={values.username || ""}
             required
+            autoFocus
           />
           <em className={styles.required}>(Required)</em>
         </div>

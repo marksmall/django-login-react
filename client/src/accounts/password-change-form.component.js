@@ -29,6 +29,7 @@ const PasswordChangeForm = ({ changePassword }) => {
             onChange={handleChange}
             value={values.old_password || ""}
             required
+            autoFocus
           />
           <em className={styles.required}>(Required)</em>
         </div>
