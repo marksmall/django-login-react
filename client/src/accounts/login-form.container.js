@@ -9,9 +9,9 @@ import LoginForm from "./login-form.component";
 //   from: props.location.state ? props.location.state.from || { from: { pathname: "/" } } : { from: { pathname: "/" } }
 // });
 const mapStateToProps = (state, props) => {
-  console.log("MAP STATE TO PROPS: ", props);
+  // console.log("MAP STATE TO PROPS: ", props);
   return {
-    from: props.location.state ? props.location.state.from || { from: { pathname: "/" } } : { from: { pathname: "/" } }
+    from: props.location.state ? props.location.state.from || { pathname: "/" } : { pathname: "/" }
   };
 };
 

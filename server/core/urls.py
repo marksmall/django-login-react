@@ -26,6 +26,7 @@ router = DefaultRouter()
 swagger_view = get_swagger_view(title='Pastebin API')
 
 urlpatterns = [
+    path('', include('django.contrib.auth.urls')),    # Used for password reset
     path('api/auth/registration/', include('rest_auth.registration.urls')),
     path('api/auth/', include('rest_auth.urls')),
     path('api/', include(router.urls)),

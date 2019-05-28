@@ -20,7 +20,7 @@ const RegisterForm = ({ register }) => {
 
   // Re-direct to originally clicked URL on successful login.
   if (redirectToLogin) {
-    return <Redirect to="/login" />;
+    return <Redirect to="/" />;
   }
 
   return (

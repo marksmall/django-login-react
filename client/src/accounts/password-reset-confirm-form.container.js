@@ -1,16 +1,16 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { activateAccount } from "./accounts.actions";
+import { confirmChangePassword } from "./accounts.actions";
 
-import AccountActivation from "./account-activation-form.component";
+import PasswordResetConfirmForm from "./password-reset-confirm-form.component";
 
 const mapStateToProps = (state, props) => ({ props });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      activateAccount
+      confirmChangePassword
     },
     dispatch
   );
@@ -18,4 +18,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AccountActivation);
+)(PasswordResetConfirmForm);

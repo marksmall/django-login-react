@@ -19,15 +19,18 @@ const LoginForm = ({ login, from }) => {
   }
 
   // Re-direct to originally clicked URL on successful login.
-  console.log("REDIRECT TO: ", from);
+  console.log("REDIRECT TO REFERRER? ", redirectToReferrer);
   if (redirectToReferrer) {
-    return <Redirect to={from.pathname} />;
+    console.log("REDIRECT TO: ", from);
+    return <Redirect to={from} />;
   }
 
   return (
     <div className={styles["login-form-container"]}>
       <form className={styles["login-form"]} onSubmit={handleSubmit}>
         <h3>Log In</h3>
+
+        {/* {console.log("WHAT THE FU")} */}
 
         <p>
           If you have not account, you can <Link to={"/register"}>register here</Link>

@@ -12,6 +12,8 @@ import LoginFormContainer from "./accounts/login-form.container";
 import PasswordResetContainer from "./accounts/password-reset-form.container";
 import PasswordChangeContainer from "./accounts/password-change-form.container";
 import UpdateUserContainer from "./accounts/update-user-form.container";
+import PasswordResetDone from "./accounts/password-reset-done.component";
+import PasswordResetConfirmContainer from "./accounts/password-reset-confirm-form.container";
 // import NotFound from "./utils/not-found.component";
 
 import styles from "./app.module.css";
@@ -20,11 +22,11 @@ const Public = () => <h3>Public</h3>;
 const Protected = () => <h3>Protected</h3>;
 
 const App = ({ user, fetchUser, history, logout }) => {
-  useEffect(() => {
-    if (!user) {
-      fetchUser();
-    }
-  }, [user, fetchUser]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     fetchUser();
+  //   }
+  // }, [user, fetchUser]);
 
   return (
     <div className={styles.app}>
@@ -73,6 +75,8 @@ const App = ({ user, fetchUser, history, logout }) => {
           <Route exact path="/register" component={RegisterFormContainer} />
           <Route exact path="/login" component={LoginFormContainer} />
           <Route exact path="/password/reset" user={user} component={PasswordResetContainer} />
+          <Route path="/reset_password_done" component={PasswordResetDone} />
+          <Route path="/reset/:uid/:token/" component={PasswordResetConfirmContainer} />
           <Route exact path="/account/confirm-email/:key" user={user} component={AccountActivationContainer} />
           <PrivateRoute exact path="/protected" user={user} component={Protected} />
           <PrivateRoute exact path="/password/change" user={user} component={PasswordChangeContainer} />

@@ -12,6 +12,7 @@ import {
 } from "./accounts.actions";
 
 const initialState = {
+  userKey: null,
   user: null,
   error: null
 };
@@ -29,7 +30,7 @@ const reducer = (state = initialState, action) => {
     case LOGIN_REQUESTED_SUCCESS:
       return {
         ...state,
-        user: action.user,
+        userKey: action.userKey,
         error: null
       };
     case LOGIN_REQUESTED_FAILURE:

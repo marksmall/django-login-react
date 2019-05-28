@@ -23,6 +23,7 @@ const API = {
   login: API_PREFIX + "/login/",
   changePassword: API_PREFIX + "/password/change/",
   resetPassword: API_PREFIX + "/password/reset/",
+  confirmResetPassword: API_PREFIX + "/password/reset/confirm/",
   logout: API_PREFIX + "/logout/",
   user: API_PREFIX + "/user/"
 };
@@ -99,9 +100,13 @@ export const login = form => async dispatch => {
     });
   }
 
-  const user = await response.json();
+  const userKey = await response.json();
+  console.log("user: ", userKey);
   NotificationManager.success("Successfully logged in", "Successful Login", 5000, () => {});
-  return dispatch({ type: LOGIN_REQUESTED_SUCCESS, user });
+  dispatch({ type: LOGIN_REQUESTED_SUCCESS, userKey });
+  return dispatch(fetchUser());
+  // console.log("USER AGAIN: ", user);
+  // return dispatch({ type: FETCH_USER_REQUESTED_SUCCESS, user });
 };
 
 /**
@@ -162,8 +167,33 @@ export const resetPassword = form => async () => {
   }
 };
 
-export const fetchUser = () => async dispatch => {
-  const response = await fetch(API.user, { credentials: "include" });
+export const confirmChangePassword = (form, params) => async () => {
+  const { uid, token } = params;
+  const data = {
+    ...form,
+    token,
+    uid
+  };
+
+  const response = await sendData(API.confirmResetPassword, data, JSON_HEADERS);
+
+  if (!response.ok) {
+    const error = new Error();
+    error.message = response.statusText;
+    NotificationManager.error(error.message, "Password Reset Error", 50000, () => {});
+  } else {
+    NotificationManager.success("Successfully Reset password", "Successful Password Reset", 5000, () => {});
+  }
+};
+
+export const fetchUser = () => async (dispatch, getState) => {
+  console.log("FETCHING USER DATA");
+  const {
+    account: {
+      userKey: { key }
+    }
+  } = getState();
+  const response = await fetch(API.user, { credentials: "include", headers: { authorisation: "Token " + key } });
 
   if (!response.ok) {
     const error = new Error();
@@ -176,6 +206,7 @@ export const fetchUser = () => async dispatch => {
   }
 
   const user = await response.json();
+  console.log("FETCHED USER: ", user);
   dispatch({ type: FETCH_USER_REQUESTED_SUCCESS, user });
 };
 
@@ -205,10 +236,10 @@ export const updateUser = form => async (dispatch, getState) => {
   return dispatch({ type: UPDATE_USER_REQUESTED_SUCCESS, user: userObj });
 };
 
-const errorResponseToString = errorResponse => {
+const errorResponseToString = response => {
   // Reduce all field errors to a single string representation.
-  const errorStr = Object.keys(errorResponse).reduce((acc, key) => {
-    const fieldErrors = errorResponse[key];
+  const errorStr = Object.keys(response).reduce((acc, key) => {
+    const fieldErrors = response[key];
 
     if (Array.isArray(fieldErrors)) {
       // Reduce array of field errors to a single string representation.
