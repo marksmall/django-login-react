@@ -23,6 +23,7 @@ services:
     command: >
       -c "cd /opt/djangologinreact/ && pipenv install --dev"
       -c "until echo > /dev/tcp/db/5432; do sleep 1; done"
+      -c "until test -f /opt/deployments/djangologinreact/client/build/asset-manifest.json; do sleep 1; done"
       -m "migrate --noinput"
       -m "runserver 0.0.0.0:8000"
     volumes:

@@ -21,74 +21,66 @@ import styles from "./app.module.css";
 const Public = () => <h3>Public</h3>;
 const Protected = () => <h3>Protected</h3>;
 
-const App = ({ user, fetchUser, history, logout }) => {
-  // useEffect(() => {
-  //   if (!user) {
-  //     fetchUser();
-  //   }
-  // }, [user, fetchUser]);
-
-  return (
-    <div className={styles.app}>
-      <NotificationContainer />
-      <header className={styles.header}>
-        <ul className={styles.menu}>
+const App = ({ user, history, logout }) => (
+  <div className={styles.app}>
+    <NotificationContainer />
+    <header className={styles.header}>
+      <ul className={styles.menu}>
+        <li>
+          <Link to="/public">Public Page</Link>
+        </li>
+        <li>
+          <Link to="/protected">Protected Page</Link>
+        </li>
+        {!user && (
           <li>
-            <Link to="/public">Public Page</Link>
+            <Link to="/register">Register</Link>
           </li>
+        )}
+        {!user && (
           <li>
-            <Link to="/protected">Protected Page</Link>
+            <Link to="/login">Login</Link>
           </li>
-          {!user && (
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
-          )}
-          {!user && (
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          )}
-          {user && (
-            <li>
-              <button onClick={() => logout(history)} data-cy="logout">
-                Logout
-              </button>
-            </li>
-          )}
-          {user && (
-            <li>
-              <Link to="/password/change">Change Password</Link>
-            </li>
-          )}
-          {user && (
-            <li>
-              <Link to="/user/update">Update User Profile</Link>
-            </li>
-          )}
-        </ul>
-      </header>
+        )}
+        {user && (
+          <li>
+            <button onClick={() => logout(history)} data-cy="logout">
+              Logout
+            </button>
+          </li>
+        )}
+        {user && (
+          <li>
+            <Link to="/password/change">Change Password</Link>
+          </li>
+        )}
+        {user && (
+          <li>
+            <Link to="/user/update">Update User Profile</Link>
+          </li>
+        )}
+      </ul>
+    </header>
 
-      <main className={styles.main}>
-        <Switch>
-          <Route path="/public" component={Public} />
-          <Route exact path="/register" component={RegisterFormContainer} />
-          <Route exact path="/login" component={LoginFormContainer} />
-          <Route exact path="/password/reset" user={user} component={PasswordResetContainer} />
-          <Route path="/reset_password_done" component={PasswordResetDone} />
-          <Route path="/reset/:uid/:token/" component={PasswordResetConfirmContainer} />
-          <Route exact path="/account/confirm-email/:key" user={user} component={AccountActivationContainer} />
-          <PrivateRoute exact path="/protected" user={user} component={Protected} />
-          <PrivateRoute exact path="/password/change" user={user} component={PasswordChangeContainer} />
-          <PrivateRoute exact path="/user/update" user={user} component={UpdateUserContainer} />
-          {/* <Route component={NotFound} /> */}
-        </Switch>
-      </main>
+    <main className={styles.main}>
+      <Switch>
+        <Route path="/public" component={Public} />
+        <Route exact path="/register" component={RegisterFormContainer} />
+        <Route exact path="/login" component={LoginFormContainer} />
+        <Route exact path="/password/reset" user={user} component={PasswordResetContainer} />
+        <Route path="/reset_password_done" component={PasswordResetDone} />
+        <Route path="/reset/:uid/:token/" component={PasswordResetConfirmContainer} />
+        <Route exact path="/account/confirm-email/:key" user={user} component={AccountActivationContainer} />
+        <PrivateRoute exact path="/protected" user={user} component={Protected} />
+        <PrivateRoute exact path="/password/change" user={user} component={PasswordChangeContainer} />
+        <PrivateRoute exact path="/user/update" user={user} component={UpdateUserContainer} />
+        {/* <Route component={NotFound} /> */}
+      </Switch>
+    </main>
 
-      <footer className={styles.footer}>This is the footer</footer>
-    </div>
-  );
-};
+    <footer className={styles.footer}>This is the footer</footer>
+  </div>
+);
 
 App.propTypes = {
   user: PropTypes.object,

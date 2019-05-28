@@ -13,7 +13,12 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os, environ, yaml, logging, logging.config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+ROOT_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# print(f"BASE_DIR: {ROOT_DIR}")
+# CLIENT_DIR = f"{ROOT_DIR}/client"
+# print(f"CLIENT_DIR: {CLIENT_DIR}")
 
 env = environ.Env()
 
@@ -67,7 +72,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'client/build')],
+        'DIRS': [os.path.join(ROOT_DIR, 'client/build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -142,13 +147,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'client/build/static'),
+    os.path.join(ROOT_DIR, 'client/build/static'),
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-WHITENOISE_ROOT = os.path.join(BASE_DIR, 'client/build')
+WHITENOISE_ROOT = os.path.join(ROOT_DIR, 'client/build')
 
 # Django Rest Framework
 REST_FRAMEWORK = {
