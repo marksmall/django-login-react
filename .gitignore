@@ -90,3 +90,5 @@ db.sqlite3
 static/
 
 client/node_modules
+client/cypress/integration/examples
+client/cypress/fixtures/example.json

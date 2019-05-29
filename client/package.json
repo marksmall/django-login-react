@@ -19,10 +19,23 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "e2e": "cypress open",
+    "e2e:install": "cypress install",
+    "e2e:verify": "cypress verify",
+    "e2e:run": "cypress run"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn test",
+      "pre-push": "yarn test"
+    }
   },
   "browserslist": {
     "production": [
@@ -38,8 +51,13 @@
   },
   "proxy": "http://server:8000",
   "devDependencies": {
+    "cypress": "^3.3.1",
+    "cypress-cucumber-preprocessor": "^1.11.2",
     "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-cucumber": "^1.2.0",
+    "eslint-plugin-cypress": "^2.2.1",
     "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^2.3.0",
     "jest-dom": "^3.4.0",
     "jest-fetch-mock": "^2.1.2",
     "prettier": "^1.17.1",

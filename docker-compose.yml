@@ -21,9 +21,8 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=core.settings
     command: >
-      -c "cd /opt/djangologinreact/ && pipenv install --dev"
+      -c "cd /opt/djangologinreact/ && pipenv install --dev --system"
       -c "until echo > /dev/tcp/db/5432; do sleep 1; done"
-      -c "until test -f /opt/deployments/djangologinreact/client/build/asset-manifest.json; do sleep 1; done"
       -m "migrate --noinput"
       -m "runserver 0.0.0.0:8000"
     volumes:
