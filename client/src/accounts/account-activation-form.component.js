@@ -1,31 +1,32 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { Redirect } from "react-router-dom";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 
-import useForm from "../hooks/useForm";
-import validate from "./account-activation-form.validator";
+import useForm from '../hooks/useForm';
+import validate from './account-activation-form.validator';
 
-import Button from "../ui/button.component";
+import Button from '../ui/button.component';
 
-import styles from "./account-activation-form.module.css";
+import styles from './account-activation-form.module.css';
 
 const AccountActivationForm = ({ activateAccount, props }) => {
   const { handleSubmit } = useForm(onSubmit, validate);
-  const [redirectToHome, setRedirectToHome] = useState(false);
+  // const [redirectToHome, setRedirectToHome] = useState(false);
 
   function onSubmit() {
     activateAccount({ key: props.match.params.key });
-    setRedirectToHome(true);
+    // setRedirectToHome(true);
   }
 
   // Re-direct to originally clicked URL on successful login.
-  if (redirectToHome) {
-    return <Redirect to="/" />;
-  }
+  // if (redirectToHome) {
+  //   console.log('REDIRECTING TO LOGNI');
+  //   return <Redirect to="/login" />;
+  // }
 
   return (
-    <div className={styles["account-activation-form-container"]}>
-      <form className={styles["account-activation-form"]} onSubmit={handleSubmit}>
+    <div className={styles['account-activation-form-container']}>
+      <form className={styles['account-activation-form']} onSubmit={handleSubmit}>
         <h3>Account Activation</h3>
 
         <div className={styles.buttons}>

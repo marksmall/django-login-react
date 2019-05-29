@@ -1,3 +1,14 @@
-from django.shortcuts import render
+"""
+Account Views
+"""
+from django.contrib.auth import get_user_model
+from .serializers import UserProfileSerializer
+from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
+User = get_user_model()
+
+
+class UserProfileViewSet(ModelViewSet):
+    """ API endpoint allowing viewing/editing of User Profiles. """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserProfileSerializer

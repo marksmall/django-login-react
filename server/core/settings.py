@@ -13,20 +13,17 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os, environ, yaml, logging, logging.config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-ROOT_DIR = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# print(f"BASE_DIR: {ROOT_DIR}")
-# CLIENT_DIR = f"{ROOT_DIR}/client"
-# print(f"CLIENT_DIR: {CLIENT_DIR}")
+ROOT_DIR = environ.Path(__file__) - 3
+SERVER_DIR = ROOT_DIR.path("server")
+CLIENT_DIR = ROOT_DIR.path("client")
 
-env = environ.Env()
+ENV = environ.Env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = ENV('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -71,9 +68,14 @@ ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(ROOT_DIR, 'client/build')],
-        'APP_DIRS': True,
+        'BACKEND':
+        'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            str(SERVER_DIR.path("accounts/templates")),
+            str(CLIENT_DIR.path('build'))
+        ],
+        'APP_DIRS':
+        True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -93,18 +95,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         'NAME': str(ROOT_DIR.path('db.sqlite3')),
 #     }
 # }
 DATABASES = {
     'default': {
         'ATOMIC_REQUESTS': True,
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': env("DJANGO_DB_NAME", default=""),
-        'USER': env("DJANGO_DB_USER", default=""),
-        'PASSWORD': env("DJANGO_DB_PASSWORD", default=""),
-        'HOST': env("DJANGO_DB_HOST", default=""),
-        'PORT': env("DJANGO_DB_PORT", default=""),
+        'NAME': ENV("DJANGO_DB_NAME", default=""),
+        'USER': ENV("DJANGO_DB_USER", default=""),
+        'PASSWORD': ENV("DJANGO_DB_PASSWORD", default=""),
+        'HOST': ENV("DJANGO_DB_HOST", default=""),
+        'PORT': ENV("DJANGO_DB_PORT", default=""),
     }
 }
 
@@ -147,13 +149,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = str(SERVER_DIR.path('static'))
 STATICFILES_DIRS = [
-    os.path.join(ROOT_DIR, 'client/build/static'),
+    str(CLIENT_DIR.path('build/static')),
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-WHITENOISE_ROOT = os.path.join(ROOT_DIR, 'client/build')
+WHITENOISE_ROOT = str(CLIENT_DIR.path('build'))
 
 # Django Rest Framework
 REST_FRAMEWORK = {
@@ -185,13 +187,21 @@ SITE_ID = 1
 # ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_LOGOUT_ON_GET = False
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300    # 5 minutes
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+# ACCOUNT_ALLOW_REGISTRATION = DynamicSetting(
+#     "accounts.UserSettings.allow_registration",
+#     env.bool('DJANGO_ACCOUNT_ALLOW_REGISTRATION', False)
+# )
+ACCOUNT_ALLOW_REGISTRATION = ENV.bool('DJANGO_ACCOUNT_ALLOW_REGISTRATION',
+                                      False)
+ACCOUNT_ADAPTER = 'accounts.adapter.AccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'accounts.adapters.SocialAccountAdapter'
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
@@ -203,15 +213,19 @@ AUTHENTICATION_BACKENDS = (
 # Django rest auth
 OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = False
-
-# Logging
-DEFAULT_LOGGING_CONFIG_PORT = 5000
-with open(os.path.join(BASE_DIR, 'logging.yaml'), 'r') as stream:
-    logging_config = yaml.load(stream, Loader=yaml.FullLoader)
-LOGGING = logging_config
-# LOGGING_CONFIG = "logging.config.fileConfig"
-# LOGGING = os.path.join(BASE_DIR, 'server/logging.yaml')
+# REST_AUTH_SERIALIZERS = {
+#     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer'
+# }
 
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "Server Project <server@donotreply.com>"
+
+# Logging
+with open(str(SERVER_DIR.path('logging.yaml')), 'r') as stream:
+    logging_config = yaml.load(stream, Loader=yaml.Loader)
+LOGGING = logging_config
+
+# Media
+MEDIA_ROOT = str(SERVER_DIR('media'))
+MEDIA_URL = '/media/'
