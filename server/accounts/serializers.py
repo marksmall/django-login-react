@@ -1,8 +1,11 @@
 """
 Account serializers
 """
+import logging
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
+
+LOGGER = logging.getLogger(__name__)
 
 
 class UserProfileSerializer(UserDetailsSerializer):
@@ -15,10 +18,12 @@ class UserProfileSerializer(UserDetailsSerializer):
 
     def update(self, instance, validated_data):
         """ Update User Profile when updating User """
+        LOGGER.debug("VALIDATED DATA: %s", validated_data)
         profile_data = validated_data.pop('userprofile', {})
         avatar = profile_data.get('avatar')
 
-        instance = super(UserSerializer, self).update(instance, validated_data)
+        instance = super(UserProfileSerializer,
+                         self).update(instance, validated_data)
 
         # get and update User Profile
         profile = instance.userprofile
