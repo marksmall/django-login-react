@@ -11,18 +11,17 @@ import styles from './account-activation-form.module.css';
 
 const AccountActivationForm = ({ activateAccount, props }) => {
   const { handleSubmit } = useForm(onSubmit, validate);
-  // const [redirectToHome, setRedirectToHome] = useState(false);
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
 
   function onSubmit() {
     activateAccount({ key: props.match.params.key });
-    // setRedirectToHome(true);
+    setRedirectToLogin(true);
   }
 
-  // Re-direct to originally clicked URL on successful login.
-  // if (redirectToHome) {
-  //   console.log('REDIRECTING TO LOGNI');
-  //   return <Redirect to="/login" />;
-  // }
+  // Re-direct to login.
+  if (redirectToLogin) {
+    return <Redirect to="/login" />;
+  }
 
   return (
     <div className={styles['account-activation-form-container']}>

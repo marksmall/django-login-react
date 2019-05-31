@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Route, Redirect } from "react-router-dom";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({ component: Component, user, ...rest }) => {
-  console.log("PRIVATE ROUTE USER: ", user);
+  console.log('PRIVATE ROUTE USER: ', user);
   return (
     <Route
       {...rest}
@@ -11,7 +11,7 @@ const PrivateRoute = ({ component: Component, user, ...rest }) => {
         return user ? (
           <Component {...props} />
         ) : (
-          <Redirect to={{ pathname: "/login", state: { from: rest.location } }} />
+          <Redirect to={{ pathname: '/login', state: { from: rest.location } }} />
         );
       }}
     />

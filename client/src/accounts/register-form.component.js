@@ -18,9 +18,9 @@ const RegisterForm = ({ register }) => {
     setRedirectToLogin(true);
   }
 
-  // Re-direct to originally clicked URL on successful login.
+  // Re-direct to login.
   if (redirectToLogin) {
-    return <Redirect to="/" />;
+    return <Redirect to="/login" />;
   }
 
   return (
