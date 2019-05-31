@@ -3,7 +3,7 @@
 
 // import 'jest-enzyme';
 
-import fetchMock from "jest-fetch-mock";
+import fetchMock from 'jest-fetch-mock';
 
 // import './polyfills/flat-map';
 

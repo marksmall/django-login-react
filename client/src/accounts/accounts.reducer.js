@@ -9,7 +9,7 @@ import {
   UPDATE_USER_REQUESTED_FAILURE,
   LOGOUT_REQUESTED_SUCCESS,
   LOGOUT_REQUESTED_FAILURE
-} from "./accounts.actions";
+} from './accounts.actions';
 
 const initialState = {
   userKey: null,

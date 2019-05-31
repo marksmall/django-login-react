@@ -1,5 +1,5 @@
-import React from "react";
-import styles from "./button.module.css";
+import React from 'react';
+import styles from './button.module.css';
 
 const Button = ({ children, onClick, href, disabled = false, active, padded = true, type, className }) => {
   const props = {};
@@ -19,10 +19,10 @@ const Button = ({ children, onClick, href, disabled = false, active, padded = tr
     classes.push(styles.active);
   }
   if (!padded) {
-    classes.push(styles["no-padding"]);
+    classes.push(styles['no-padding']);
   }
 
-  props.className = classes.join(" ");
+  props.className = classes.join(' ');
   return href ? (
     <a {...props}>{children}</a>
   ) : (

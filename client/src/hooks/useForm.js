@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect } from 'react';
 
 const initialState = {
   values: {},
@@ -6,9 +6,9 @@ const initialState = {
   isSubmitting: false
 };
 
-const SET_VALUES = "SET_VALUES";
-const SET_ERRORS = "SET_ERRORS";
-const SET_IS_SUBMITTING = "SET_IS_SUBMITTING";
+const SET_VALUES = 'SET_VALUES';
+const SET_ERRORS = 'SET_ERRORS';
+const SET_IS_SUBMITTING = 'SET_IS_SUBMITTING';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -31,7 +31,7 @@ const reducer = (state, action) => {
       };
 
     default:
-      throw new Error("UNKNOWN ACTION TYPE");
+      throw new Error('UNKNOWN ACTION TYPE');
   }
 };
 

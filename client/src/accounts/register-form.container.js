@@ -1,9 +1,9 @@
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import { register } from "./accounts.actions";
+import { register } from './accounts.actions';
 
-import RegisterForm from "./register-form.component";
+import RegisterForm from './register-form.component';
 
 const mapStateToProps = state => ({});
 

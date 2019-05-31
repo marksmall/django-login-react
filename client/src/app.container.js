@@ -1,11 +1,11 @@
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import { history } from "./store";
-import { getUser } from "./accounts/accounts.selector";
-import { logout, fetchUser } from "./accounts/accounts.actions";
+import { history } from './store';
+import { getUser } from './accounts/accounts.selector';
+import { logout, fetchUser } from './accounts/accounts.actions';
 
-import App from "./app.component";
+import App from './app.component';
 
 const mapStateToProps = state => ({ user: getUser(state), history });
 

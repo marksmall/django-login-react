@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import useForm from "../hooks/useForm";
-import validate from "./password-reset-confirm-form.validator";
+import useForm from '../hooks/useForm';
+import validate from './password-reset-confirm-form.validator';
 
-import Button from "../ui/button.component";
+import Button from '../ui/button.component';
 
-import styles from "./password-reset-confirm-form.module.css";
+import styles from './password-reset-confirm-form.module.css';
 
 const PasswordResetConfirmForm = ({ confirmChangePassword, props }) => {
   const { handleChange, handleSubmit, reset, values, errors } = useForm(onSubmit, validate);
@@ -16,37 +16,37 @@ const PasswordResetConfirmForm = ({ confirmChangePassword, props }) => {
   }
 
   return (
-    <div className={styles["password-reset-confirm-form-container"]}>
-      <form className={styles["password-reset-confirm-form"]} onSubmit={handleSubmit}>
+    <div className={styles['password-reset-confirm-form-container']}>
+      <form className={styles['password-reset-confirm-form']} onSubmit={handleSubmit}>
         <h3>Create New Password</h3>
 
-        <div className={styles["form-row"]}>
+        <div className={styles['form-row']}>
           <label className={styles.label}>New Password: </label>
           <input
-            className={`${styles.input} ${errors.new_password1 ? styles.error : ""}`}
+            className={`${styles.input} ${errors.new_password1 ? styles.error : ''}`}
             type="password"
             name="new_password1"
             onChange={handleChange}
-            value={values.new_password1 || ""}
+            value={values.new_password1 || ''}
             required
           />
           <em className={styles.required}>(Required)</em>
         </div>
-        {errors.new_password1 && <p className={styles["error-message"]}>{errors.new_password1}</p>}
+        {errors.new_password1 && <p className={styles['error-message']}>{errors.new_password1}</p>}
 
-        <div className={styles["form-row"]}>
+        <div className={styles['form-row']}>
           <label className={styles.label}>Password (Comfirm): </label>
           <input
-            className={`${styles.input} ${errors.new_password2 ? styles.error : ""}`}
+            className={`${styles.input} ${errors.new_password2 ? styles.error : ''}`}
             type="password"
             name="new_password2"
             onChange={handleChange}
-            value={values.new_password2 || ""}
+            value={values.new_password2 || ''}
             required
           />
           <em className={styles.required}>(Required)</em>
         </div>
-        {errors.new_password2 && <p className={styles["error-message"]}>{errors.new_password2}</p>}
+        {errors.new_password2 && <p className={styles['error-message']}>{errors.new_password2}</p>}
 
         <div className={styles.buttons}>
           <Button className={styles.button} onClick={reset} disabled={Object.keys(values).length === 0}>

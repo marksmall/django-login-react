@@ -1,11 +1,11 @@
-import thunk from "redux-thunk";
-import { applyMiddleware, compose, createStore } from "redux";
-import { combineReducers } from "redux";
+import thunk from 'redux-thunk';
+import { applyMiddleware, compose, createStore } from 'redux';
+import { combineReducers } from 'redux';
 
-import { connectRouter, routerMiddleware } from "connected-react-router";
-import { createBrowserHistory } from "history";
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import { createBrowserHistory } from 'history';
 
-import account from "./accounts/accounts.reducer";
+import account from './accounts/accounts.reducer';
 
 export const history = createBrowserHistory();
 
@@ -21,7 +21,7 @@ const middleware = [thunk, routerMiddleware(history)];
 
 let store;
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
   // 1. Add redux dev tools (development mode only).
   // 2. Create store composed of reducers and middleware.
   const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
