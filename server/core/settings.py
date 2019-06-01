@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os, environ, yaml, logging, logging.config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = environ.Path(__file__) - 3
 SERVER_DIR = ROOT_DIR.path("server")
 CLIENT_DIR = ROOT_DIR.path("client")
@@ -222,9 +223,89 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "Server Project <server@donotreply.com>"
 
 # Logging
-with open(str(SERVER_DIR.path('logging.yaml')), 'r') as stream:
-    logging_config = yaml.load(stream, Loader=yaml.Loader)
-LOGGING = logging_config
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+    # 'verbose': {
+    #     'format':
+    #     '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+    #     'style': '{',
+    # },
+        'simple': {
+            'format':
+            '{asctime}s - {module}s - {name}s - {levelname}s - {message}s',
+            'style': '{',
+        },
+    },
+    # 'filters': {
+    #     'special': {
+    #         '()': 'project.logging.SpecialFilter',
+    #         'foo': 'bar',
+    #     },
+    #     'require_debug_true': {
+    #         '()': 'django.utils.log.RequireDebugTrue',
+    #     },
+    # },
+    'handlers': {
+        'console': {
+    # 'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'stream': 'ext://sys.stdout'
+        },
+        'file': {
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'formatter': 'simple',
+            'filename': '/var/log/server.log',
+            'when': 'midnight',
+            'backupCount': 20,
+            'encoding': 'utf8'
+    # 'filters': ['special']
+    # },
+    # 'mail_admins': {
+    #     'level': 'ERROR',
+    #     'class': 'django.utils.log.AdminEmailHandler',
+    #     'filters': ['special']
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'server.accounts': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+    # 'filters': ['special']
+        },
+        'server': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+    # 'filters': ['special']
+        }
+    }
+}
+
+# DEFAULT_LOGGING_CONFIG_PORT = 5000
+# with open(os.path.join(BASE_DIR, 'logging.yaml'), 'r') as stream:
+#     logging_config = yaml.load(stream, Loader=yaml.FullLoader)
+# LOGGING = logging_config
+# LOGGING_CONFIG = "logging.config.fileConfig"
+# LOGGING = os.path.join(BASE_DIR, 'server/logging.yaml')
+
+# # Logging
+# # LOGGING_CONFIG = 'logging.config.fileConfig'
+# # with open(str(SERVER_DIR.path('logging.yaml')), 'r') as stream:
+# with open(str(SERVER_DIR.path('logging.yaml')), 'r') as stream:
+#     LOGGING = yaml.load(stream, Loader=yaml.FullLoader)
+# # LOGGING = logging_config
 
 # Media
 MEDIA_ROOT = str(SERVER_DIR('media'))

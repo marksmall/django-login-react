@@ -11,16 +11,17 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         """ Add custom arguments """
-        parser.add_argument(
-            "--single",
-            action="store_true",
-            help="The mode which to run tests in")
-        parser.add_argument(
-            "files", nargs="*", help="The test file|dir to run")
+        parser.add_argument("--single",
+                            action="store_true",
+                            help="The mode which to run tests in")
+        parser.add_argument("files",
+                            nargs="*",
+                            help="The test file|dir to run")
 
     def handle(self, *args, **options):
         """ Handle running of tests """
-        # LOGGER.debug(f"ARGS: {args}")
+        LOGGER.debug(f"ARGS: {args}")
+        print(f"ARGS: {args}")
         # LOGGER.debug(f"OPTIONS: {options}")
         # LOGGER.debug(f"FILES: {files}")
         mode = options["single"]
@@ -43,8 +44,10 @@ class Command(BaseCommand):
 
         # LOGGER.debug(f"LIST Command to run: {cmd}")
         command = "".join(cmd)
+        print('COMMAND: ', command)
         # LOGGER.debug(f"Command to run: {command}")
         com = " ".join(*options["files"])
+        print("COM: ", com)
         LOGGER.debug(f"ls {com}")
         # subprocess.run(f"ls {com}")
         # subprocess.run(f"ls {options['files']}")

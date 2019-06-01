@@ -1,0 +1,25 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import Select from 'react-select';
+
+import styles from './theme-selector.module.css';
+
+const ThemeSelector = ({ themes, selectedTheme, selectTheme }) => (
+  <label className={styles.label}>
+    <strong>Application Theme:</strong>
+    <Select
+      defaultValue={selectedTheme}
+      className={styles.select}
+      onChange={event => selectTheme(event.value)}
+      options={themes}
+    />
+  </label>
+);
+
+ThemeSelector.propTypes = {
+  themes: PropTypes.array.isRequired,
+  selectTheme: PropTypes.func.isRequired
+};
+
+export default ThemeSelector;

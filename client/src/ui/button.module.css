@@ -6,7 +6,7 @@ button.button {
 }
 
 .button {
-  background: var(--button-background-color);
+  background-color: var(--button-background);
   text-decoration: none;
   color: var(--button-text);
   border-radius: 2px;
@@ -14,11 +14,12 @@ button.button {
   font-weight: bold;
   text-align: center;
   display: inline-block;
+  cursor: pointer;
 }
 
 .button:hover,
 .button:focus {
-  background: var(--button-background-color-hover);
+  background-color: var(--button-background-hover);
   outline: none;
 }
 
@@ -29,7 +30,7 @@ button.button {
 
 .active,
 .button:active {
-  background: var(--button-background-color-active);
+  background-color: var(--button-background-active);
 }
 
 .round {

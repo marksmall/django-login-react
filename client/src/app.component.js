@@ -15,13 +15,15 @@ import UpdateUserContainer from './accounts/update-user-form.container';
 import PasswordResetDone from './accounts/password-reset-done.component';
 import PasswordResetConfirmContainer from './accounts/password-reset-confirm-form.container';
 // import NotFound from "./utils/not-found.component";
+import ThemeSelector from './theming/theme-selector.component';
+import AccountMenuButton from './accounts/account-menu-button.component';
 
 import styles from './app.module.css';
 
 const Public = () => <h3>Public</h3>;
 const Protected = () => <h3>Protected</h3>;
 
-const App = ({ user, fetchUser, history, logout }) => {
+const App = ({ user, fetchUser, history, logout, selectedTheme, themes, selectTheme }) => {
   // If page refreshed, ensure we try to retrieve the logged in user.
   useEffect(() => {
     if (!user) {
@@ -30,41 +32,40 @@ const App = ({ user, fetchUser, history, logout }) => {
   }, [user, fetchUser]);
 
   return (
-    <div className={styles.app}>
+    <div className={`${styles.app} ${styles[selectedTheme.value]}`}>
       <NotificationContainer />
       <header className={styles.header}>
-        <ul className={styles.menu}>
+        <ul className={styles.nav}>
           <li>
-            <Link to="/public">Public Page</Link>
+            <Link className={styles['nav-item']} to="/public">
+              Public Page
+            </Link>
           </li>
           <li>
-            <Link to="/protected">Protected Page</Link>
+            <Link className={styles['nav-item']} to="/protected">
+              Protected Page
+            </Link>
           </li>
           {!user && (
             <li>
-              <Link to="/register">Register</Link>
+              <Link className={styles['nav-item']} to="/register">
+                Register
+              </Link>
             </li>
           )}
           {!user && (
             <li>
-              <Link to="/login">Login</Link>
+              <Link className={styles['nav-item']} to="/login">
+                Login
+              </Link>
             </li>
           )}
+          <li>
+            <ThemeSelector themes={themes} selectedTheme={selectedTheme} selectTheme={selectTheme} />
+          </li>
           {user && (
             <li>
-              <button onClick={() => logout(history)} data-cy="logout">
-                Logout
-              </button>
-            </li>
-          )}
-          {user && (
-            <li>
-              <Link to="/password/change">Change Password</Link>
-            </li>
-          )}
-          {user && (
-            <li>
-              <Link to="/user/update">Update User Profile</Link>
+              <AccountMenuButton user={user} logout={() => logout(history)} />
             </li>
           )}
         </ul>
@@ -94,7 +95,10 @@ const App = ({ user, fetchUser, history, logout }) => {
 App.propTypes = {
   user: PropTypes.object,
   history: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  themes: PropTypes.array.isRequired,
+  selectedTheme: PropTypes.object.isRequired,
+  selectTheme: PropTypes.func.isRequired
 };
 
 export default App;
