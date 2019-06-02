@@ -19,6 +19,7 @@ const ThemeSelector = ({ themes, selectedTheme, selectTheme }) => (
 
 ThemeSelector.propTypes = {
   themes: PropTypes.array.isRequired,
+  selectedTheme: PropTypes.object.isRequired,
   selectTheme: PropTypes.func.isRequired
 };
 

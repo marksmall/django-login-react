@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { Link, Route, Switch } from 'react-router-dom';
 import { NotificationContainer } from 'react-notifications';
@@ -19,6 +19,9 @@ import ThemeSelector from './theming/theme-selector.component';
 import AccountMenuButton from './accounts/account-menu-button.component';
 
 import styles from './app.module.css';
+
+const UserList = lazy(() => import('./accounts/admin/user-list.container'));
+const Admin = lazy(() => import('./accounts/admin/admin.container'));
 
 const Public = () => <h3>Public</h3>;
 const Protected = () => <h3>Protected</h3>;
@@ -46,6 +49,13 @@ const App = ({ user, fetchUser, history, logout, selectedTheme, themes, selectTh
               Protected Page
             </Link>
           </li>
+          {user && (
+            <li>
+              <Link className={styles['nav-item']} to="/admin">
+                Admin
+              </Link>
+            </li>
+          )}
           {!user && (
             <li>
               <Link className={styles['nav-item']} to="/register">
@@ -83,6 +93,11 @@ const App = ({ user, fetchUser, history, logout, selectedTheme, themes, selectTh
           <PrivateRoute exact path="/protected" user={user} component={Protected} />
           <PrivateRoute exact path="/password/change" user={user} component={PasswordChangeContainer} />
           <PrivateRoute exact path="/user/update" user={user} component={UpdateUserContainer} />
+          <Suspense fallback={<h3>Admin Loading...</h3>}>
+            <PrivateRoute exact path="/admin" user={user} component={Admin} />
+            <PrivateRoute exact path="/users" user={user} component={UserList} />
+            <PrivateRoute exact path="/others" user={user} component={UserList} />
+          </Suspense>
           {/* <Route component={NotFound} /> */}
         </Switch>
       </main>

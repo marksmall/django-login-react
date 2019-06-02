@@ -1,92 +1,126 @@
 import React from 'react';
+import { render, cleanup, fireEvent } from 'react-testing-library';
+import 'jest-dom/extend-expect';
+
 import Button from './button.component';
-import { shallow } from 'enzyme';
 
 describe('Button', () => {
-  it('renders a button tag under normal circumstsances', () => {
-    const component = shallow(<Button>Some Text</Button>);
-    expect(component.find('button')).toExist();
+  afterEach(cleanup);
+
+  it('should render a button tag under normal circumstances', () => {
+    const { getByText } = render(<Button>Some Text</Button>);
+    expect(getByText('Some Text')).toBeInTheDocument();
   });
-  it('renders an `a` tag if passed a `href` attribute', () => {
-    const component = shallow(<Button href="foo">Some Text</Button>);
-    expect(component.find('button')).not.toExist();
-    expect(component.find('a')).toExist();
+
+  it('should render an `a` tag if passed an `href` attribute', () => {
+    const { container, getByText } = render(<Button href="foo">Some Text</Button>);
+
+    expect(container.querySelector('button')).not.toBeInTheDocument();
+    expect(container.querySelector('a')).toBeInTheDocument();
+    const element = getByText('Some Text');
+    expect(element).toBeInTheDocument();
+    expect(element).toHaveAttribute('href', 'foo');
   });
-  it('renders an `a` tag even if `onClick` is present and propagets it', () => {
+
+  it('should render an `a` tag even if `onClick` is present and propagates it', () => {
     const handler = jest.fn();
-    const component = shallow(
+    const { container, getByText } = render(
       <Button href="foo" onClick={handler}>
         Some Text
       </Button>
     );
-    expect(component.find('button')).not.toExist();
-    expect(component.find('a')).toExist();
-    component.find('a').simulate('click');
+
+    expect(container.querySelector('button')).not.toBeInTheDocument();
+    expect(container.querySelector('a')).toBeInTheDocument();
+    const element = getByText('Some Text');
+    expect(element).toBeInTheDocument();
+    expect(element).toHaveAttribute('href', 'foo');
+
+    fireEvent.click(element);
     expect(handler).toHaveBeenCalled();
   });
-  it("shows the button's children", () => {
-    const component = shallow(<Button>Some Text</Button>);
-    expect(component.find('button').text()).toEqual('Some Text');
-    const linkComponent = shallow(<Button href="foo">Some Text</Button>);
-    expect(linkComponent.find('a').text()).toEqual('Some Text');
+
+  it('should have the correct class(s) for styling', () => {
+    const { container, getByText, rerender } = render(<Button>Some Text</Button>);
+
+    let element = getByText('Some Text');
+    expect(element).toHaveClass('button');
+    expect(element).not.toHaveClass('disabled');
+
+    rerender(<Button href="foo">Some Text</Button>);
+    expect(container.querySelector('a')).toHaveClass('button');
   });
-  it('has the correct class for styling', () => {
-    const component = shallow(<Button>Some Text</Button>);
-    expect(component.find('button').hasClass('button')).toBe(true);
-    expect(component.find('button').hasClass('disabled')).toBe(false);
-    const linkComponent = shallow(<Button href="foo">Some Text</Button>);
-    expect(linkComponent.find('a').hasClass('button')).toBe(true);
-  });
-  it('propagates the click event properly', () => {
+
+  it('should propagate the click event', () => {
     const handler = jest.fn();
-    const component = shallow(<Button onClick={handler}>Some Text</Button>);
-    component.find('button').simulate('click');
+    const { getByText } = render(<Button onClick={handler}>Some Text</Button>);
+
+    fireEvent.click(getByText('Some Text'));
+
     expect(handler).toHaveBeenCalled();
   });
-  describe('disabled', () => {
-    it('adds the disabled class for styling', () => {
-      const component = shallow(<Button disabled={true}>Some Text</Button>);
-      expect(component.find('button').hasClass('disabled')).toBe(true);
-      expect(component.props('disabled')).toBeTruthy();
+
+  describe('Button disabled', () => {
+    afterEach(cleanup);
+
+    it('should add the disabled class for styling', () => {
+      const { getByText } = render(<Button disabled>Some Text</Button>);
+
+      const element = getByText('Some Text');
+      expect(element).toHaveClass('disabled');
+      expect(element).toHaveAttribute('disabled');
     });
-    it("doesn't propaget the click event", () => {
+
+    it('should not propagate the click event', () => {
       const handler = jest.fn();
-      const component = shallow(
-        <Button disabled={true} onClick={handler}>
+      const { getByText } = render(
+        <Button onClick={handler} disabled>
           Some Text
         </Button>
       );
-      component.find('button').simulate('click');
+
+      fireEvent.click(getByText('Some Text'));
       expect(handler).not.toHaveBeenCalled();
     });
-    it('is set on the button, not just the style', () => {
-      const handler = jest.fn();
-      let component = shallow(
-        <Button disabled={true} onClick={handler}>
-          Some Text
-        </Button>
-      );
-      expect(component.props('disabled')).toBeTruthy();
 
-      // Re-render to check disabled attribute switches
-      component = shallow(<Button onClick={handler}>Some Text</Button>);
-      expect(component.prop('disabled')).toBeFalsy();
-    });
-  });
-  describe('active', () => {
-    it('adds the active class for styling', () => {
-      const component = shallow(<Button active={true}>Some Text</Button>);
-      expect(component.find('button').hasClass('active')).toBe(true);
-    });
-  });
-  describe('type', () => {
-    it('adds the round class for styling, when type attribute provided', () => {
-      const component = shallow(
-        <Button active={true} type="round">
+    it('should switch between disabled and enabled', () => {
+      const handler = jest.fn();
+      const { getByText, rerender } = render(
+        <Button onClick={handler} disabled>
           Some Text
         </Button>
       );
-      expect(component.find('button').hasClass('round')).toBe(true);
+
+      let element = getByText('Some Text');
+      expect(element).toHaveAttribute('disabled');
+      expect(element).toHaveClass('disabled');
+      fireEvent.click(element);
+      expect(handler).not.toHaveBeenCalled();
+
+      rerender(<Button onClick={handler}>Some Text</Button>);
+      element = getByText('Some Text');
+      fireEvent.click(element);
+      expect(handler).toHaveBeenCalled();
+    });
+  });
+
+  describe('Button active', () => {
+    afterEach(cleanup);
+
+    it('should add the active class for styling', () => {
+      const { getByText } = render(<Button active={true}>Some Text</Button>);
+
+      expect(getByText('Some Text')).toHaveClass('active');
+    });
+
+    describe('Button type', () => {
+      afterEach(cleanup);
+
+      it('adds the round class for styling, when type attribute provided', () => {
+        const { getByText } = render(<Button type="round">Some Text</Button>);
+
+        expect(getByText('Some Text')).toHaveClass('round');
+      });
     });
   });
 });

@@ -1,40 +1,79 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { render, cleanup, fireEvent } from 'react-testing-library';
+import 'jest-dom/extend-expect';
 
 import Switch from './switch.component';
 
 describe('Switch Component', () => {
-  it('should be in the on style', () => {
-    const on = true;
-    const onClick = jest.fn();
+  afterEach(cleanup);
 
-    const testee = shallow(<Switch on={on} onClick={onClick} />);
+  it('should render in the off state', () => {
+    const handler = jest.fn();
+    const { container } = render(<Switch on={false} onClick={handler} />);
 
-    expect(testee).toMatchSnapshot();
-    expect(testee.find('.toggle-btn-on').length).toEqual(1);
-    expect(testee.find('.toggle-btn-off').length).toEqual(0);
+    let element = container.querySelector('button');
+    expect(element).toBeInTheDocument();
+    expect(element).toHaveClass('toggle-btn');
+    expect(element).toHaveClass('toggle-btn-off');
+    expect(element).not.toHaveClass('toggle-btn-on');
+
+    element = container.querySelector('.toggle-input');
+    expect(element).toBeInTheDocument();
+    expect(element).toHaveAttribute('type', 'checkbox');
   });
 
-  it('should be in the off style', () => {
-    const on = false;
-    const onClick = jest.fn();
+  it('should render in the on state', () => {
+    const handler = jest.fn();
+    const { container } = render(<Switch on={true} onClick={handler} />);
 
-    const testee = shallow(<Switch on={on} onClick={onClick} />);
+    let element = container.querySelector('button');
+    expect(element).toBeInTheDocument();
+    expect(element).not.toHaveAttribute('disabled');
+    expect(element).toHaveClass('toggle-btn');
+    expect(element).toHaveClass('toggle-btn-on');
+    expect(element).not.toHaveClass('toggle-btn-off');
 
-    expect(testee.find('.toggle-btn-on').length).toEqual(0);
-    expect(testee.find('.toggle-btn-off').length).toEqual(1);
+    element = container.querySelector('.toggle-input');
+    expect(element).toBeInTheDocument();
+    expect(element).toHaveAttribute('type', 'checkbox');
   });
 
-  it('should switch from off to on style', () => {
-    const on = true;
-    const onClick = jest.fn();
+  it('should switch from off to on state', () => {
+    const handler = jest.fn();
+    const { container, rerender } = render(<Switch on={false} onClick={handler} />);
 
-    const testee = shallow(<Switch on={on} onClick={onClick} />);
+    let element = container.querySelector('button');
+    expect(element).toHaveClass('toggle-btn-off');
+    expect(element).not.toHaveClass('toggle-btn-on');
 
-    expect(testee.find('.toggle-btn-on').length).toEqual(1);
-    expect(onClick.mock.calls.length).toEqual(0);
+    fireEvent.click(element);
+    expect(handler).toHaveBeenCalled();
 
-    testee.find('button').simulate('click');
-    expect(onClick.mock.calls.length).toEqual(1);
+    rerender(<Switch on={true} onClick={handler} />);
+    expect(element).toHaveClass('toggle-btn-on');
+    expect(element).not.toHaveClass('toggle-btn-off');
+  });
+
+  describe('Switch Disabled', () => {
+    afterEach(cleanup);
+
+    it('should render in disabled state', () => {
+      const handler = jest.fn();
+      const { container } = render(<Switch on={false} onClick={handler} disabled />);
+
+      let element = container.querySelector('button');
+      expect(element).toBeInTheDocument();
+      expect(element).toHaveAttribute('disabled');
+    });
+
+    it('should not propagate onClick event', () => {
+      const handler = jest.fn();
+      const { container, debug } = render(<Switch on={false} onClick={handler} disabled />);
+      debug();
+
+      fireEvent.click(container.querySelector('button'));
+
+      expect(handler).not.toHaveBeenCalled();
+    });
   });
 });

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import styles from './switch.module.css';
 
@@ -22,6 +23,11 @@ const Switch = ({ on, className = '', onClick, disabled = false }) => (
   </div>
 );
 
-Switch.propTypes = {};
+Switch.propTypes = {
+  on: PropTypes.bool.isRequired,
+  className: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
+};
 
 export default Switch;

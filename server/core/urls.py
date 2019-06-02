@@ -25,31 +25,18 @@ from .views import InitView
 
 from django.http import HttpResponse, JsonResponse
 
-import logging
-logger = logging.getLogger(__name__)
-logger.info('GORT HEREEEEEEEEEE')
-print("OKAUY PRINT STATEMENT")
-
-
-def logging_func(request):
-    logger.info("LOGGING FUNC")
-    print("LOG FUNCTION PRINT BUGGER GOT HERE")
-    return JsonResponse({"title": "My Title"})
-
-
 router = DefaultRouter()
 
 swagger_view = get_swagger_view(title='Pastebin API')
 
 urlpatterns = [
-    path('mark/', logging_func),
     path('api/', include(router.urls)),
     path('api/', include('accounts.urls')),
     path('admin/', admin.site.urls),
     path('swagger/', swagger_view),
     path('docs/', include_docs_urls(title='API Documentation')),
     path('', InitView.as_view(), name="index"),
-    re_path(
-        r'^.*/$', InitView.as_view(),
-        name="index"),    # Pass-through any unknown requests to the client.
+    # re_path(
+    #     r'^.*/$', InitView.as_view(),
+    #     name="index"),    # Pass-through any unknown requests to the client.
 ]

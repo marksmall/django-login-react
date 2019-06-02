@@ -6,6 +6,7 @@ import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 
 import account from './accounts/accounts.reducer';
+import admin from './accounts/admin/users.reducer';
 import theming from './theming/theming.reducer';
 
 export const history = createBrowserHistory();
@@ -14,6 +15,7 @@ const createRootReducer = history =>
   combineReducers({
     account,
     theming,
+    admin,
     router: connectRouter(history)
   });
 

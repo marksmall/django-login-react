@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { ReactComponent as ProfileIcon } from './profile.svg';
+// import AuthenticatedIcon from './hibs-badge.jpg';
 
 import styles from './account-menu-button.module.css';
 
@@ -27,6 +28,16 @@ const AccountMenuButton = ({ user, logout }) => {
         }}
       >
         <ProfileIcon className={styles.profile} />
+        {/* <img className={styles.profile} src={AuthenticatedIcon} alt="avatar" /> */}
+        {/* <div
+          // className={styles.avatar}
+          style={{
+            background: 'url("hibs-badge.jpg") no-repeat',
+            backgroundSize: 'contain',
+            width: '100%',
+            height: '100%'
+          }}
+        /> */}
       </button>
 
       {isMenuVisible && (

@@ -1,14 +1,10 @@
 """
 Tests for Account Views
 """
-import pytest, logging
+import pytest
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-
-# from .Views import UserPr
-
-LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.django_db
@@ -17,7 +13,8 @@ class TestRegistrationViewSet:
 
     def test_successful_get_user_profile(self, client):
         """ Test retrieval of User Profiles """
-        response = client.get(reverse("userprofile"))
+        response = client.get(reverse("user-list"))
+        print(f"RESPONSE: {response}")
         assert response.status_code == status.HTTP_200_OK
 
     def test_successful_update_user_profile(self, client):

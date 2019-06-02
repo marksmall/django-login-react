@@ -1,4 +1,5 @@
 const validate = values => {
+  console.log('VALUES: ', values);
   let errors = {};
 
   if (values.first_name) {

@@ -9,11 +9,7 @@ export default class Toggle extends Component {
 
   state = { on: this.props.on || false };
 
-  toggle = () =>
-    this.setState(
-      ({ on }) => ({ on: !on }),
-      () => this.props.onToggle(this.state.on)
-    );
+  toggle = () => this.setState(({ on }) => ({ on: !on }), () => this.props.onToggle(this.state.on));
 
   getStateAndHelpers() {
     return { on: this.state.on, toggle: this.toggle };

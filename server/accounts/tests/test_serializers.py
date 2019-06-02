@@ -2,10 +2,6 @@ import pytest
 
 from accounts.serializers import UserProfileSerializer
 
-import logging
-
-LOGGER = logging.getLogger(__name__)
-
 
 @pytest.mark.django_db
 class TestUserProfileSerializer:
@@ -13,16 +9,21 @@ class TestUserProfileSerializer:
         user = {
             "username": "testusername1",
             "password": "password",
-            "email": "email@test.com"
+            "email": "email@test.com",
+            "avatar": "sometext",
         }
 
-        serializer = UserProfileSerializer(user)
-
-        assert serializer.is_valid
-        LOGGER.debug(f"DATA: {serializer.data}")
-        # assert serializer.data["username"] == "testusername1"
-        # assert serializer.data["email"] == "email@test.com"
-        # assert "password" not in serializer.data
+        serializer = UserProfileSerializer(data=user)
+        print(f"SERIALIZER DATA: {serializer.initial_data}")
+        print(repr(serializer))
+        assert serializer.is_valid()
+        # print(f"DATA: {serializer.data}")
+        print(f"VALIDATE DATA: {serializer.validated_data}")
+        # assert False
+        assert serializer.validated_data["username"] == "testusername1"
+        # FIXME: Why doesn't serializer send all UserDetailsSerializer fields
+        # assert serializer.validated_data["email"] == "email@test.com"
+        assert "password" not in serializer.data
 
     # def test_missing_username(self):
     #     user = {

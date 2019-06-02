@@ -39,8 +39,11 @@ export const register = form => async dispatch => {
   const response = await sendData(API.register, form, JSON_HEADERS);
 
   if (!response.ok) {
-    const errorResponse = await response.json();
+    // const errorResponse = await response.json();
+    console.log('RESPONSE: ', JSON.stringify(response), response.statusText);
+    const errorResponse = {};
     const error = new Error(errorResponseToString(errorResponse));
+    console.log('ERROR: ', error);
 
     NotificationManager.error(error.message, `"Registration Error - ${response.statusText}`, 50000, () => {});
 
@@ -79,6 +82,7 @@ export const activateAccount = form => async () => {
 };
 
 export const fetchUser = () => async dispatch => {
+  console.log('FETCHING USER');
   const response = await fetch(API.user, { credentials: 'include' });
 
   if (!response.ok) {
@@ -92,6 +96,7 @@ export const fetchUser = () => async dispatch => {
   }
 
   const user = await response.json();
+  console.log('USER: ', user);
   return dispatch({ type: FETCH_USER_REQUESTED_SUCCESS, user });
 };
 
@@ -122,6 +127,7 @@ export const login = form => async dispatch => {
 
   // Now that we are logged in, retrieve the user's
   dispatch(fetchUser());
+  console.log('USER FETCHED');
 
   return dispatch({ type: LOGIN_REQUESTED_SUCCESS, userKey });
 };
