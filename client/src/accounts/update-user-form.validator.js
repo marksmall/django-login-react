@@ -1,16 +1,19 @@
-const validate = values => {
-  console.log('VALUES: ', values);
+import { trimForm } from '../utils/form';
+
+const validate = form => {
   let errors = {};
 
-  if (values.first_name) {
-    if (values.first_name.length < 2) {
-      errors.first_name = `First name ${values.first_name} is too short`;
+  const trimmed = trimForm(form);
+
+  if (trimmed.first_name) {
+    if (trimmed.first_name.length < 2) {
+      errors.first_name = `First name ${trimmed.first_name} is too short`;
     }
   }
 
-  if (values.last_name) {
-    if (values.last_name.length < 2) {
-      errors.last_name = `Last name ${values.last_name} is too short`;
+  if (trimmed.last_name) {
+    if (trimmed.last_name.length < 2) {
+      errors.last_name = `Last name ${trimmed.last_name} is too short`;
     }
   }
 

@@ -215,9 +215,9 @@ AUTHENTICATION_BACKENDS = (
 # Django rest auth
 OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = False
-# REST_AUTH_SERIALIZERS = {
-#     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer'
-# }
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserProfileSerializer'
+}
 
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
@@ -228,14 +228,13 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-    # 'verbose': {
-    #     'format':
-    #     '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-    #     'style': '{',
-    # },
-        'simple': {
+        'verbose': {
             'format':
-            '{asctime}s - {module}s - {name}s - {levelname}s - {message}s',
+            '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
             'style': '{',
         },
     },
@@ -250,49 +249,37 @@ LOGGING = {
     # },
     'handlers': {
         'console': {
+            'level': 'INFO',
     # 'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-            'stream': 'ext://sys.stdout'
+            'formatter': 'simple'
         },
-        'file': {
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'formatter': 'simple',
-            'filename': '/var/log/server.log',
-            'when': 'midnight',
-            'backupCount': 20,
-            'encoding': 'utf8'
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
     # 'filters': ['special']
-    # },
-    # 'mail_admins': {
-    #     'level': 'ERROR',
-    #     'class': 'django.utils.log.AdminEmailHandler',
-    #     'filters': ['special']
         }
     },
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': 'ERROR',
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
             'propagate': False,
         },
-        'server.accounts': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-    # 'filters': ['special']
-        },
-        'server': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
+        'server.core': {
+            'handlers': ['console', 'mail_admins'],
+            'level': 'INFO',
     # 'filters': ['special']
         }
     }
 }
+
+LOGGER = logging.getLogger("core.settings")
+LOGGER.info("EVENTUALLY")
 
 # DEFAULT_LOGGING_CONFIG_PORT = 5000
 # with open(os.path.join(BASE_DIR, 'logging.yaml'), 'r') as stream:

@@ -68,8 +68,7 @@ describe('Switch Component', () => {
 
     it('should not propagate onClick event', () => {
       const handler = jest.fn();
-      const { container, debug } = render(<Switch on={false} onClick={handler} disabled />);
-      debug();
+      const { container } = render(<Switch on={false} onClick={handler} disabled />);
 
       fireEvent.click(container.querySelector('button'));
 

@@ -1,4 +1,4 @@
-const validate = values => {
+const validate = form => {
   let errors = {};
 
   return errors;

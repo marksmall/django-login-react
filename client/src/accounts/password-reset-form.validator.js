@@ -1,10 +1,14 @@
-const validate = values => {
+import { trimForm } from '../utils/form';
+
+const validate = form => {
   let errors = {};
 
-  if (!values.email) {
+  const trimmed = trimForm(form);
+
+  if (!trimmed.email) {
     errors.email = 'Email address is required';
-  } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-    errors.email = `Email address ${values.email} is invalid`;
+  } else if (!/\S+@\S+\.\S+/.test(trimmed.email)) {
+    errors.email = `Email address ${trimmed.email} is invalid`;
   }
 
   return errors;

@@ -33,44 +33,50 @@ const LoginForm = ({ login, user, from }) => {
         </p>
 
         <div className={styles['form-row']}>
-          <label className={styles.label}>Username: </label>
-          <input
-            className={`${styles.input} ${errors.username ? styles.error : ''}`}
-            type="text"
-            name="username"
-            onChange={handleChange}
-            value={values.username || ''}
-            required
-            autoFocus
-          />
+          <label className={styles.label}>
+            Username:
+            <input
+              className={`${styles.input} ${errors.username ? styles.error : ''}`}
+              type="text"
+              name="username"
+              onChange={handleChange}
+              value={values.username || ''}
+              required
+              autoFocus
+            />
+          </label>
           <em className={styles.required}>(Required)</em>
         </div>
         {errors.username && <p className={styles['error-message']}>{errors.username}</p>}
 
         <div className={styles['form-row']}>
-          <label className={styles.label}>Email Address: </label>
-          <input
-            className={`${styles.input} ${errors.email ? styles.error : ''}`}
-            type="email"
-            name="email"
-            onChange={handleChange}
-            value={values.email || ''}
-            required
-          />
+          <label className={styles.label}>
+            Email Address:
+            <input
+              className={`${styles.input} ${errors.email ? styles.error : ''}`}
+              type="email"
+              name="email"
+              onChange={handleChange}
+              value={values.email || ''}
+              required
+            />
+          </label>
           <em className={styles.required}>(Required)</em>
         </div>
         {errors.email && <p className={styles['error-message']}>{errors.email}</p>}
 
         <div className={styles['form-row']}>
-          <label className={styles.label}>Password: </label>
-          <input
-            className={`${styles.input} ${errors.password ? styles.error : ''}`}
-            type="password"
-            name="password"
-            onChange={handleChange}
-            value={values.password || ''}
-            required
-          />
+          <label className={styles.label}>
+            Password:
+            <input
+              className={`${styles.input} ${errors.password ? styles.error : ''}`}
+              type="password"
+              name="password"
+              onChange={handleChange}
+              value={values.password || ''}
+              required
+            />
+          </label>
           <em className={styles.required}>(Required)</em>
         </div>
         {errors.password && <p className={styles['error-message']}>{errors.password}</p>}

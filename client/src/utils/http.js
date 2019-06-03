@@ -43,7 +43,6 @@ export const sendData = (url, data = '', headers = {}, method = 'POST') => {
         .then(response => response)
         .catch(error => error);
     } else if (method === 'PUT') {
-      console.log('URL: ', url, ' DATA: ', data);
       return fetch(url, {
         credentials: 'include',
         method,

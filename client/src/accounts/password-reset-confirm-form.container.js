@@ -5,7 +5,7 @@ import { confirmChangePassword } from './accounts.actions';
 
 import PasswordResetConfirmForm from './password-reset-confirm-form.component';
 
-const mapStateToProps = (state, props) => ({ props });
+const mapStateToProps = (state, routerProps) => ({ routerProps });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(

@@ -21,16 +21,18 @@ const PasswordResetForm = ({ resetPassword }) => {
         <h3>Reset Password</h3>
 
         <div className={styles['form-row']}>
-          <label className={styles.label}>Email Address: </label>
-          <input
-            className={`${styles.input} ${errors.email ? styles.error : ''}`}
-            type="email"
-            name="email"
-            onChange={handleChange}
-            value={values.email || ''}
-            required
-            autoFocus
-          />
+          <label className={styles.label}>
+            Email Address:
+            <input
+              className={`${styles.input} ${errors.email ? styles.error : ''}`}
+              type="email"
+              name="email"
+              onChange={handleChange}
+              value={values.email || ''}
+              required
+              autoFocus
+            />
+          </label>
           <em className={styles.required}>(Required)</em>
         </div>
         {errors.email && <p className={styles['error-message']}>{errors.email}</p>}

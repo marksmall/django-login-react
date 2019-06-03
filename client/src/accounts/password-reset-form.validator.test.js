@@ -1,15 +1,22 @@
-import validate from './update-user-form.validator';
+import validate from './password-reset-form.validator';
 
-describe('Update User Form Validator', () => {
+describe('Password Reset Form Validator', () => {
   describe('Failure values', () => {
     const testFields = [
       {
-        first_name: 'J', // Error, too short
-        last_name: 'Smith'
+        // Error, missing `email`
       },
       {
-        first_name: 'James',
-        last_name: 'S' // Error, too short
+        email: '' // Error, missing value
+      },
+      {
+        email: ' ' // Error, missing value
+      },
+      {
+        email: 'testuser:test.com' // Error, malformed email
+      },
+      {
+        email: 'testuser@testcom' // Error, malformed email
       }
     ];
 
@@ -22,20 +29,7 @@ describe('Update User Form Validator', () => {
   describe('Success values', () => {
     const testFields = [
       {
-        first_name: 'Su',
-        last_name: 'Smith'
-      },
-      {
-        first_name: 'John',
-        last_name: 'Smith'
-      },
-      {
-        first_name: '',
-        last_name: 'Smith'
-      },
-      {
-        first_name: 'John',
-        last_name: ''
+        email: 'testuser@test.com'
       }
     ];
 

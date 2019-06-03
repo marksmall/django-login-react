@@ -1,22 +1,26 @@
-const validate = values => {
+import { trimForm } from '../utils/form';
+
+const validate = form => {
   let errors = {};
 
-  if (!values.username) {
+  const trimmed = trimForm(form);
+
+  if (!trimmed.username) {
     errors.username = 'Username is required';
-  } else if (values.username.length < 3) {
-    errors.username = `Username ${values.email} is too short`;
+  } else if (trimmed.username.length < 3) {
+    errors.username = `Username ${trimmed.email} is too short`;
   }
 
-  if (!values.email) {
+  if (!trimmed.email) {
     errors.email = 'Email address is required';
-  } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-    errors.email = `Email address ${values.email} is invalid`;
+  } else if (!/\S+@\S+\.\S+/.test(trimmed.email)) {
+    errors.email = `Email address ${trimmed.email} is invalid`;
   }
 
-  if (!values.password) {
+  if (!trimmed.password) {
     errors.password = 'Password is required';
-  } else if (values.password.length < 5) {
-    errors.password = `Password ${values.password} is too short`;
+  } else if (trimmed.password.length < 5) {
+    errors.password = `Password ${trimmed.password} is too short`;
   }
 
   return errors;

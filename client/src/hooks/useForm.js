@@ -56,7 +56,7 @@ const useForm = (callback, validate) => {
 
     const newValues = {
       ...state.values,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value.trim()
     };
 
     dispatch({ type: SET_ERRORS, errors: validate(newValues) });

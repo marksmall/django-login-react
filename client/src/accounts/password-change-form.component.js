@@ -21,44 +21,50 @@ const PasswordChangeForm = ({ changePassword }) => {
         <h3>Change Password</h3>
 
         <div className={styles['form-row']}>
-          <label className={styles.label}>Old Password: </label>
-          <input
-            className={`${styles.input} ${errors.old_password ? styles.error : ''}`}
-            type="password"
-            name="old_password"
-            onChange={handleChange}
-            value={values.old_password || ''}
-            required
-            autoFocus
-          />
+          <label className={styles.label}>
+            Old Password:
+            <input
+              className={`${styles.input} ${errors.old_password ? styles.error : ''}`}
+              type="password"
+              name="old_password"
+              onChange={handleChange}
+              value={values.old_password || ''}
+              required
+              autoFocus
+            />
+          </label>
           <em className={styles.required}>(Required)</em>
         </div>
         {errors.old_password && <p className={styles['error-message']}>{errors.old_password}</p>}
 
         <div className={styles['form-row']}>
-          <label className={styles.label}>New Password: </label>
-          <input
-            className={`${styles.input} ${errors.new_password1 ? styles.error : ''}`}
-            type="password"
-            name="new_password1"
-            onChange={handleChange}
-            value={values.new_password1 || ''}
-            required
-          />
+          <label className={styles.label}>
+            New Password:
+            <input
+              className={`${styles.input} ${errors.new_password1 ? styles.error : ''}`}
+              type="password"
+              name="new_password1"
+              onChange={handleChange}
+              value={values.new_password1 || ''}
+              required
+            />
+          </label>
           <em className={styles.required}>(Required)</em>
         </div>
         {errors.new_password1 && <p className={styles['error-message']}>{errors.new_password1}</p>}
 
         <div className={styles['form-row']}>
-          <label className={styles.label}>Password (Comfirm): </label>
-          <input
-            className={`${styles.input} ${errors.new_password2 ? styles.error : ''}`}
-            type="password"
-            name="new_password2"
-            onChange={handleChange}
-            value={values.new_password2 || ''}
-            required
-          />
+          <label className={styles.label}>
+            Password (Confirm):
+            <input
+              className={`${styles.input} ${errors.new_password2 ? styles.error : ''}`}
+              type="password"
+              name="new_password2"
+              onChange={handleChange}
+              value={values.new_password2 || ''}
+              required
+            />
+          </label>
           <em className={styles.required}>(Required)</em>
         </div>
         {errors.new_password2 && <p className={styles['error-message']}>{errors.new_password2}</p>}

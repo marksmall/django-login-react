@@ -28,130 +28,127 @@ const EditableCell = ({ row, data, updateUser }) => (
   />
 );
 
-const UserTable = ({ data, deleteUser, updateUser, copyUser }) => {
-  console.log('TABLE DATA: ', data);
-  return (
-    <div className={style.container}>
-      {data && (
-        <ReactTable
-          noDataText="No Data Available"
-          data={data}
-          // filterable
-          // defaultFilterMethod={(filter, row) =>
-          //   String(row[filter.id]) === filter.value
-          // }
-          columns={[
-            // { Header: 'ID', accessor: 'id' },
-            {
-              Header: 'Actions',
-              accessor: 'action',
-              maxWidth: 150,
-              Cell: row => {
-                // console.log('CELL ROW: ', row);
-                return (
-                  <span>
-                    <button onClick={() => copyUser(row.original)} data-tip data-for="copy-user">
-                      <CopyIcon className={style.icon} alt="Copy" />
-                    </button>
-                    <ReactTooltip id="copy-user">
-                      <span>Copy User</span>
-                    </ReactTooltip>
+const UserTable = ({ data, deleteUser, updateUser, copyUser }) => (
+  <div className={style.container}>
+    {data && (
+      <ReactTable
+        noDataText="No Data Available"
+        data={data}
+        // filterable
+        // defaultFilterMethod={(filter, row) =>
+        //   String(row[filter.id]) === filter.value
+        // }
+        columns={[
+          // { Header: 'ID', accessor: 'id' },
+          {
+            Header: 'Actions',
+            accessor: 'action',
+            maxWidth: 150,
+            Cell: row => {
+              // console.log('CELL ROW: ', row);
+              return (
+                <span>
+                  <button onClick={() => copyUser(row.original)} data-tip data-for="copy-user">
+                    <CopyIcon className={style.icon} alt="Copy" />
+                  </button>
+                  <ReactTooltip id="copy-user">
+                    <span>Copy User</span>
+                  </ReactTooltip>
 
-                    <button onClick={() => deleteUser(row.original.pk)} data-tip data-for="delete-user">
-                      <DeleteIcon className={style.icon} alt="Delete" />
-                    </button>
-                    <ReactTooltip id="delete-user">
-                      <span>Delete User</span>
-                    </ReactTooltip>
-                  </span>
-                );
-              }
-            },
-            {
-              Header: 'Key',
-              id: 'pk',
-              accessor: d => d.pk,
-              contentEditable: true,
-              filterable: true,
-              filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
-              Cell: row => {
-                return <EditableCell row={row} data={data} updateUser={updateUser} />;
-              }
-            },
-            {
-              Header: 'Username',
-              id: 'username',
-              accessor: d => d.username,
-              contentEditable: true,
-              filterable: true,
-              filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
-              Cell: row => {
-                return <EditableCell row={row} data={data} updateUser={updateUser} />;
-              }
-            },
-            {
-              Header: 'Email',
-              id: 'email',
-              accessor: d => d.email,
-              contentEditable: true,
-              filterable: true,
-              filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
-              Cell: row => {
-                return <EditableCell row={row} data={data} updateUser={updateUser} />;
-              }
-            },
-            {
-              Header: 'First Name',
-              id: 'first_name',
-              accessor: d => d.first_name,
-              contentEditable: true,
-              filterable: true,
-              filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
-              Cell: row => {
-                return <EditableCell row={row} data={data} updateUser={updateUser} />;
-              }
-            },
-            {
-              Header: 'Last Name',
-              id: 'last_name',
-              accessor: d => d.last_name,
-              contentEditable: true,
-              filterable: true,
-              filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
-              Cell: row => {
-                return <EditableCell row={row} data={data} updateUser={updateUser} />;
-              }
+                  <button onClick={() => deleteUser(row.original.pk)} data-tip data-for="delete-user">
+                    <DeleteIcon className={style.icon} alt="Delete" />
+                  </button>
+                  <ReactTooltip id="delete-user">
+                    <span>Delete User</span>
+                  </ReactTooltip>
+                </span>
+              );
             }
-          ]}
-          defaultPageSize={5}
-          className="-striped -highlight"
-          // getTdProps={(state, row, col, instance) => ({
-          //   onClick: (event, cb) => {
-          //     // do some stuff with the event
-          //     // console.log('CLICKED TD: ', row, col, instance, event);
-          //     if (col.id !== 'action') {
-          //       const {
-          //         original: { id, name, description }
-          //       } = row;
-          //       setActiveUser({
-          //         id,
-          //         'user-name': name,
-          //         'user-description': description
-          //       });
-          //     }
-          //     // cb()
-          //   }
-          // })}
-          // getTrProps={(state, rowInfo, column) => ({
-          //   onClick: event => {
-          //     console.log('CLICKED TABLE ROW: ', rowInfo, state, event, column);
-          //   }
-          // })}
-        />
-      )}
-    </div>
-  );
-};
+          },
+          {
+            Header: 'Key',
+            id: 'pk',
+            accessor: d => d.pk,
+            contentEditable: true,
+            filterable: true,
+            filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
+            Cell: row => {
+              return <EditableCell row={row} data={data} updateUser={updateUser} />;
+            }
+          },
+          {
+            Header: 'Username',
+            id: 'username',
+            accessor: d => d.username,
+            contentEditable: true,
+            filterable: true,
+            filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
+            Cell: row => {
+              return <EditableCell row={row} data={data} updateUser={updateUser} />;
+            }
+          },
+          {
+            Header: 'Email',
+            id: 'email',
+            accessor: d => d.email,
+            contentEditable: true,
+            filterable: true,
+            filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
+            Cell: row => {
+              return <EditableCell row={row} data={data} updateUser={updateUser} />;
+            }
+          },
+          {
+            Header: 'First Name',
+            id: 'first_name',
+            accessor: d => d.first_name,
+            contentEditable: true,
+            filterable: true,
+            filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
+            Cell: row => {
+              return <EditableCell row={row} data={data} updateUser={updateUser} />;
+            }
+          },
+          {
+            Header: 'Last Name',
+            id: 'last_name',
+            accessor: d => d.last_name,
+            contentEditable: true,
+            filterable: true,
+            filterMethod: (filter, row) => row[filter.id].startsWith(filter.value),
+            Cell: row => {
+              return <EditableCell row={row} data={data} updateUser={updateUser} />;
+            }
+          }
+        ]}
+        defaultPageSize={5}
+        className="-striped -highlight"
+        // getTdProps={(state, row, col, instance) => ({
+        //   onClick: (event, cb) => {
+        //     // do some stuff with the event
+        //     // console.log('CLICKED TD: ', row, col, instance, event);
+        //     if (col.id !== 'action') {
+        //       const {
+        //         original: { id, name, description }
+        //       } = row;
+        //       setActiveUser({
+        //         id,
+        //         'user-name': name,
+        //         'user-description': description
+        //       });
+        //     }
+        //     // cb()
+        //   }
+        // })}
+        // getTrProps={(state, rowInfo, column) => ({
+        //   onClick: event => {
+        //     console.log('CLICKED TABLE ROW: ', rowInfo, state, event, column);
+        //   }
+        // })}
+      />
+    )}
+  </div>
+);
 
 UserTable.propTypes = {
   data: PropTypes.array,

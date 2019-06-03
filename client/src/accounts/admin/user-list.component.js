@@ -16,11 +16,10 @@ const UserList = ({ users, fetchUsers, deleteUser, updateUser, copyUser }) => {
 
   const [isNewUserMode, setIsNewUserMode] = useState(false);
 
-  console.log('USERS: ', users);
-  console.log('IS NEW USER MODE: ', isNewUserMode);
-
   return (
     <div className={styles['table-container']}>
+      <h3>Maintain Users</h3>
+
       <p className={styles.strapline}>
         <strong>NOTE:</strong> Use actions within table to update user(s)
       </p>
@@ -36,7 +35,6 @@ const UserList = ({ users, fetchUsers, deleteUser, updateUser, copyUser }) => {
 
 UserList.propTypes = {
   users: PropTypes.array,
-  createUser: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
   updateUser: PropTypes.func.isRequired,
   copyUser: PropTypes.func.isRequired
