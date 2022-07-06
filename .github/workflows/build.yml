@@ -1,0 +1,233 @@
+name: BUILD
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+    tags:
+      - "*"
+  workflow_dispatch:
+
+env:
+  AWS_REGISTRY: 339570402237.dkr.ecr.eu-west-1.amazonaws.com
+  AWS_SERVER_REPOSITORY: company/orbis/django
+  AWS_CLIENT_REPOSITORY: company/orbis/client
+
+jobs:
+  test:
+    - name: Test
+      run: |
+        echo "GITHUB CONTEXT: ${{ github }}"
+  check-trigger-type:
+    name: Check Trigger Type
+    runs-on: ubuntu-20.04
+    outputs:
+      ref: ${{ steps.check.outputs.ref }}
+    steps:
+      - id: check
+        run: |
+          if ${{ github.event_name == 'pull_request' }}
+          then
+            echo "::set-output name=ref::${{ github.event.pull_request.head.sha }}"
+          else
+            echo "::set-output name=ref::$GITHUB_REF"
+          fi
+  client-tests:
+    name: Client-side Tests
+    runs-on: ubuntu-20.04
+    continue-on-error: true
+    timeout-minutes: 40
+    needs: check-trigger-type
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{needs.check-trigger-type.outputs.ref}}
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - name: Cache Node Modules
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: "client/node_modules"
+          key: ${{ runner.os }}-orbis-frontend-build-${{ hashFiles('client/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-orbis-frontend-build-
+      - name: Install frontend dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        env:
+          CI: "true"
+          GITHUB_REGISTRY_TOKEN: ${{ secrets.ASTROSAT_GITHUB_REGISTRY_TOKEN }}
+        working-directory: client
+        run: |
+          yarn install
+      - name: Test Frontend
+        env:
+          CI: "true"
+          GITHUB_REGISTRY_TOKEN: ${{ secrets.ASTROSAT_GITHUB_REGISTRY_TOKEN }}
+        working-directory: client
+        run: |
+          yarn test:ci
+      - name: Upload Frontend Test Results
+        uses: actions/upload-artifact@v1
+        with:
+          name: Frontend Test Report
+          path: client/jest_html_reporters.html
+
+  server-tests:
+    name: Server-side Tests
+    runs-on: ubuntu-20.04
+    continue-on-error: true
+    needs: check-trigger-type
+    timeout-minutes: 40
+    container:
+      image: python:3.8.6
+      ports:
+        - "8000:8000"
+      env:
+        SYS_ENV: ci
+        DJANGO_SETTINGS_MODULE: core.settings
+        DJANGO_DB_HOST: 127.0.0.1:5666
+    services:
+      db:
+        image: kartoza/postgis:11.0-2.5
+        env:
+          POSTGRES_DBNAME: orbis
+          POSTGRES_USER: orbis
+          POSTGRES_PASS: orbis
+          ALLOW_IP_RANGE: 0.0.0.0/0
+        ports:
+          - "5666:5432"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{needs.check-trigger-type.outputs.ref}}
+
+      - name: Setup container
+        run: |
+          apt-get update && apt-get install -y postgresql-client python3-gdal
+          pip3 install --upgrade pip
+          pip3 install --upgrade pipenv==2021.5.29
+
+      - name: Install Dependencies and Run Tests
+        working-directory: server
+        run: |
+          pipenv install --dev
+          pipenv run ./manage.py migrate --noinput
+          pipenv run pytest --html=backend-report.html --self-contained-html ./
+      - name: Upload Backend Test Results
+        uses: actions/upload-artifact@v1
+        with:
+          name: Backend Test Report
+          path: server/backend-report.html
+
+  build-client-docker:
+    name: Build, Tag and Push Client Docker Image
+    runs-on: ubuntu-20.04
+    needs: check-trigger-type
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{needs.check-trigger-type.outputs.ref}}
+
+      - name: Setup dependencies
+        run: ./scripts/ci-setup-deps.sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ASTROSAT_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.ASTROSAT_AWS_SECRET_ACCESS_KEY }}
+
+      - name: Build Docker Image
+        run: |
+          HEAD_SHA="$(git rev-parse HEAD)"
+          export GIT_SHA=${HEAD_SHA:0:7}
+          DOCKER_BUILDKIT=1 docker build . -t ${AWS_REGISTRY}/${AWS_CLIENT_REPOSITORY}:${GIT_SHA} --build-arg COMMIT_SHA=${GIT_SHA} --build-arg GITHUB_REGISTRY_TOKEN=${{ secrets.ASTROSAT_GITHUB_REGISTRY_TOKEN }} -f ./Dockerfile.client.deployment
+
+      - name: Push image to AWS Docker Registry
+        run: |
+          HEAD_SHA="$(git rev-parse HEAD)"
+          export GIT_SHA=${HEAD_SHA:0:7}
+          docker push ${AWS_REGISTRY}/${AWS_CLIENT_REPOSITORY}:${GIT_SHA}
+
+  build-server-docker:
+    name: Build, Tag and Push Server Docker Image
+    runs-on: ubuntu-20.04
+    timeout-minutes: 40
+    needs: check-trigger-type
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{needs.check-trigger-type.outputs.ref}}
+
+      - name: Setup dependencies
+        run: ./scripts/ci-setup-deps.sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ASTROSAT_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.ASTROSAT_AWS_SECRET_ACCESS_KEY }}
+
+      - name: Build Docker Image
+        run: |
+          HEAD_SHA="$(git rev-parse HEAD)"
+          export GIT_SHA=${HEAD_SHA:0:7}
+          DOCKER_BUILDKIT=1 docker build . -t ${AWS_REGISTRY}/${AWS_SERVER_REPOSITORY}:${GIT_SHA} --build-arg COMMIT_SHA=${GIT_SHA} -f ./Dockerfile.server.deployment
+
+      - name: Push image to AWS Docker Registry
+        run: |
+          HEAD_SHA="$(git rev-parse HEAD)"
+          export GIT_SHA=${HEAD_SHA:0:7}
+          docker push ${AWS_REGISTRY}/${AWS_SERVER_REPOSITORY}:${GIT_SHA}
+
+  deploy-to-testing:
+    needs:
+      [
+        build-client-docker,
+        build-server-docker,
+        check-trigger-type,
+      ]
+    name: Request a Deployment to Testing
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{needs.check-trigger-type.outputs.ref}}
+
+      - name: Create Deployment
+        run: |
+          set -eu
+
+          # Used to query for PRs associated with the commit
+          export GITHUB_TOKEN="${{ secrets.ASTROSAT_GITHUB_CREATE_DEPLOYMENT_TOKEN }}"
+
+          set -x
+
+          cd scripts/create-deployment
+          yarn install
+
+          REPO_OWNER="$(dirname "$GITHUB_REPOSITORY")"
+          REPO_NAME="$(basename "$GITHUB_REPOSITORY")"
+          HEAD_SHA="$(git rev-parse HEAD)"
+
+          if [[ "$GITHUB_REF" == "refs/heads/master" ]]; then
+            node createDeployment.js \
+              --environment testing \
+              --repo-owner "$REPO_OWNER" \
+              --repo-name "$REPO_NAME" \
+              deploy-primary \
+              --commit "$HEAD_SHA"
+
+
+          else
+            node createDeployment.js \
+              --environment testing \
+              --repo-owner "$REPO_OWNER" \
+              --repo-name "$REPO_NAME" \
+              deploy-associated-prs \
+              --commit "$HEAD_SHA"
+
+          fi

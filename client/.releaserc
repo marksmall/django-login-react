@@ -6,19 +6,15 @@
     [
       "@semantic-release/npm",
       {
-        "npmPublish": false,
-        "tarballDir": "dist"
+        "npmPublish": false
       }
     ],
+    "@semantic-release/github",
     [
-      "@semantic-release/github",
+      "@semantic-release/git",
       {
-        "assets": "../../**"
-      }
-    ],
-    "@semantic-release/git"
+        "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+    }]
   ],
-  "preset": "angular",
-  "dryRun": false,
-  "ci": false
+  "preset": "angular"
 }

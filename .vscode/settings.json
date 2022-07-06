@@ -1,0 +1,6 @@
+{
+  "python.pythonPath": "/home/msmall/.local/share/virtualenvs/django-login-react-bp9atiZu/bin/python",
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true,
+  "python.linting.pylintPath": "/usr/bin/pylint3"
+}

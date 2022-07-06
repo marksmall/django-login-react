@@ -1,0 +1,38 @@
+name: RELEASE
+
+on:
+  repository_dispatch:
+    types: [make_release]
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - name: Cache Node Modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: frontend-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            frontend-build-
+      - name: Build Release
+        env:
+          CI: true
+          GITHUB_TOKEN: ${{ secrets.ASTROSAT_GITHUB_RELEASE_TOKEN }}
+          GITHUB_REGISTRY_TOKEN: ${{ secrets.ASTROSAT_GITHUB_REGISTRY_TOKEN }}
+        working-directory: client
+        run: |
+          yarn install
+          yarn release

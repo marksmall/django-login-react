@@ -23,6 +23,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "release": "semantic-release",
     "e2e": "cypress open",
     "e2e:install": "cypress install",
     "e2e:verify": "cypress verify",
