@@ -31,7 +31,7 @@ jobs:
         run: echo '${{ toJSON(strategy) }}'
       - name: Dump matrix context
         run: echo '${{ toJSON(matrix) }}'
-  check-trigger-type:
+          check-trigger-type:
     name: Check Trigger Type
     runs-on: ubuntu-20.04
     outputs:
