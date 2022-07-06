@@ -27,6 +27,7 @@ const Public = () => <h3>Public</h3>;
 const Protected = () => <h3>Protected</h3>;
 
 const App = ({ user, fetchUser, history, logout, selectedTheme, themes, selectTheme }) => {
+  console.log('Something');
   // If page refreshed, ensure we try to retrieve the logged in user.
   useEffect(() => {
     if (!user) {
