@@ -15,10 +15,22 @@ env:
   AWS_CLIENT_REPOSITORY: company/orbis/client
 
 jobs:
-  test:
-    - name: Test
-      run: |
-        echo "GITHUB CONTEXT: ${{ github }}"
+  context-test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump job context
+        run: echo '${{ toJSON(job) }}'
+      - name: Dump steps context
+        run: echo '${{ toJSON(steps) }}'
+      - name: Dump runner context
+        run: echo '${{ toJSON(runner) }}'
+      - name: Dump strategy context
+        run: echo '${{ toJSON(strategy) }}'
+      - name: Dump matrix context
+        run: echo '${{ toJSON(matrix) }}'
   check-trigger-type:
     name: Check Trigger Type
     runs-on: ubuntu-20.04
