@@ -21,13 +21,22 @@ jobs:
       - name: Dump GitHub context
         id: github_context_step
         run: echo '${{ toJSON(github) }}'
-      - name: Dump job context
-        run: echo '${{ toJSON(job) }}'
-      - name: Dump steps context
-        run: echo '${{ toJSON(steps) }}'
-      - name: Dump runner context
-        run: echo '${{ toJSON(runner) }}'
-      - name: Dump strategy context
-        run: echo '${{ toJSON(strategy) }}'
-      - name: Dump matrix context
-        run: echo '${{ toJSON(matrix) }}'
+      - name: List individual context parts
+        id: github_context_parts
+        run: |
+          echo "ACTION PATH ${{ github.action_path }}"
+          echo "ACTION REF ${{ github.action_ref }}"
+          echo "REF NAME ${{ github.ref_name }}"
+          echo "REF TYPE ${{ github.ref_type }}"
+          echo "WORKFLOW ${{ github.workflow }}"
+          echo "REF ${{ github.ref }}"
+      # - name: Dump job context
+      #   run: echo '${{ toJSON(job) }}'
+      # - name: Dump steps context
+      #   run: echo '${{ toJSON(steps) }}'
+      # - name: Dump runner context
+      #   run: echo '${{ toJSON(runner) }}'
+      # - name: Dump strategy context
+      #   run: echo '${{ toJSON(strategy) }}'
+      # - name: Dump matrix context
+      #   run: echo '${{ toJSON(matrix) }}'
